@@ -1,0 +1,19 @@
+.banner {
+  :global {
+    .splide {
+      padding: 0;
+      .splide__slide {
+        max-height: 480px;
+        .ant-image {
+          height: 100%;
+          width: 100%;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+}
