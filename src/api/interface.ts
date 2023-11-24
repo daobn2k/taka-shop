@@ -49,4 +49,5 @@ export interface IProductData {
   create_date: string;
   size: string;
   code: string;
+  price_discount: number;
 }

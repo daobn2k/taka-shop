@@ -11,10 +11,10 @@ import { useGetParamsSearch } from '@/hooks/useGetParamsSearch';
 import { ROUTE_PATH } from '@/routes/route.constant';
 import { useGetProduct } from '@/service.ts/product';
 
-import FormSearch from './FormSearch';
 import styles from './index.module.scss';
+import FormSearch from '../Products/FormSearch';
 
-const Products = () => {
+const ProductsHot = () => {
   const { onNavSearch } = useCustomNavigate();
   const dataParams = useGetParamsSearch();
 
@@ -50,12 +50,12 @@ const Products = () => {
   return (
     <div className={styles.root}>
       <Spin spinning={loading} className={styles.spin}>
-        <SelectionHeaderHome title={dataParams?.category_name ?? 'Sản phẩm mới'}>
+        <SelectionHeaderHome title={dataParams?.category_name ?? 'Sản phẩm hot'}>
           <FormSearch onSearch={onSearch} />
         </SelectionHeaderHome>
         {products?.length > 0 && (
           <>
-            <ListProduct data={products} tag='Sản phẩm mới' />
+            <ListProduct data={products} tag='Sản phẩm hot' />
             <Row align={'middle'} justify={'center'}>
               <CustomPagination
                 page={data?.meta?.pagination?.current_page}
@@ -68,7 +68,7 @@ const Products = () => {
         )}
         {products?.length <= 0 && (
           <Row align={'middle'} justify={'center'}>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có sản phẩm mới' />
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có sản phẩm hot' />
           </Row>
         )}
       </Spin>
@@ -76,4 +76,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default ProductsHot;

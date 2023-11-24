@@ -13,6 +13,7 @@ export interface ICart {
   image: string;
   quantity: number;
   price: number;
+  price_discount: number;
   description: string;
   size: TProductSize;
   userid?: number;

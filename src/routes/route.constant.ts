@@ -9,4 +9,6 @@ export const ROUTE_PATH = {
   CART: '/cart',
   INFORMATION: '/information',
   ADMIN: '/admin',
+  PRODUCT_HOT: '/product-hot',
+  RATING: '/rating',
 };

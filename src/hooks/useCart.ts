@@ -28,6 +28,7 @@ export const useCart = () => {
         image: product.image,
         description: product.description,
         price: Number(product.price), // Chuyển đổi giá thành số
+        price_discount: product.price_discount ? Number(product.price_discount) : 0,
         quantity: quantity ?? 1,
         size: size ?? 'S',
         userid: profile?.id,
@@ -61,7 +62,7 @@ export const useCart = () => {
       return {
         product: c.id,
         quantity: c.quantity,
-        price: c.price * c.quantity,
+        price: c.price_discount ? (c.price - c.price_discount) * c.quantity : c.price * c.quantity,
         size: c.size,
       };
     }) as IOrderProduct[];
@@ -73,7 +74,10 @@ export const useCart = () => {
 
   const { totalQuantity, totalPrice } = useMemo(() => {
     const totalQuantity = cartByUser.reduce((acc: any, cart: ICart) => acc + cart.quantity, 0);
-    const totalPrice = cartByUser.reduce((acc, cart: ICart) => acc + cart.price * cart.quantity, 0);
+    const totalPrice = cartByUser.reduce(
+      (acc, cart: ICart) => acc + (cart.price - cart.price_discount) * cart.quantity,
+      0,
+    );
 
     return { totalQuantity, totalPrice };
   }, [cartByUser]);

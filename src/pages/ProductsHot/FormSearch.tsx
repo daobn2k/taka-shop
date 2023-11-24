@@ -1,12 +1,8 @@
-import { useMemo } from 'react';
-
 import { useDebounceFn } from 'ahooks';
-import { DatePicker, Form, Input, Row, Select } from 'antd';
+import { DatePicker, Form, Input, Row } from 'antd';
 import dayjs from 'dayjs';
 
 import { useGetParamsSearch } from '@/hooks/useGetParamsSearch';
-import { IInfoCategory } from '@/store/category/category';
-import { useCategory } from '@/store/category/useCategory';
 import { formatFormValuesChange } from '@/utils/common';
 
 import styles from './index.module.scss';
@@ -24,7 +20,6 @@ const FormSearch = ({
 }) => {
   const dataParams = useGetParamsSearch();
 
-  const category = useCategory();
   const onFieldsChange = useDebounceFn(
     (_, allFields) => {
       const v = formatFormValuesChange(allFields);
@@ -34,36 +29,17 @@ const FormSearch = ({
       if (v.date) {
         values.start_created_date = v.date[0]?.format('YYYY-MM-DD');
         values.end_created_date = v.date[1]?.format('YYYY-MM-DD');
-      } else {
-        values.start_created_date = '';
-        values.end_created_date = '';
       }
 
       if (v.name) {
         values.name = v.name;
       }
-      values.category_id = v.category_id ? v.category_id?.id ?? v.category_id : '';
-
       onSearch(values);
     },
     {
       wait: 500,
     },
   );
-
-  const optionsCategories = useMemo(() => {
-    return (
-      (category?.length > 0 &&
-        category?.map((c: IInfoCategory) => {
-          return {
-            id: c.id,
-            label: c.name,
-            value: c.id,
-          };
-        })) ||
-      []
-    );
-  }, [category]);
   return (
     <Form
       onFieldsChange={onFieldsChange.run}
@@ -78,9 +54,6 @@ const FormSearch = ({
       <Row align={'middle'} justify={'end'} className={styles.rowSearch}>
         <Form.Item name='name' noStyle>
           <Input placeholder='Tìm kiếm theo tên sản phẩm hoặc mã sản phẩm' />
-        </Form.Item>
-        <Form.Item name='category_id' noStyle>
-          <Select placeholder='Danh mục sản phẩm' options={optionsCategories} allowClear />
         </Form.Item>
         <Form.Item name='date' noStyle>
           <RangePicker placeholder={['Từ ngày', 'Đến ngày']} format='DD-MM-YYYY' />

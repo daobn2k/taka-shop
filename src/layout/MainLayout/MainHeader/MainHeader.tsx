@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import type { MenuProps } from 'antd';
 import { Input, Menu, Row } from 'antd';
@@ -15,12 +15,12 @@ import styles from './index.module.scss';
 
 const { Search } = Input;
 
-const formatItemMenu = (items: any[]) => {
+const formatItemMenu = (items: any[], onClickCategory: any) => {
   return items.map((e) => {
     return {
       key: 'sub-menu-key' + e.id,
       label: (
-        <Text type='heading5-regular' key={e.key}>
+        <Text type='heading5-regular' key={e.key} onClick={() => onClickCategory(e)}>
           {e.name}
         </Text>
       ),
@@ -46,14 +46,14 @@ const getItemsMenu: (categories: any[]) => MenuProps['items'] = (categories: any
       key: 'product',
     },
     {
-      label: <Text type='heading5-regular'>Giỏ hàng</Text>,
+      label: <Text type='heading5-regular'>Sản phẩm hot</Text>,
       icon: '',
-      key: 'cart',
+      key: 'product-hot',
     },
     {
-      label: <Text type='heading5-regular'>Giới thiệu</Text>,
+      label: <Text type='heading5-regular'>Đánh giá</Text>,
       icon: '',
-      key: 'introduce',
+      key: 'rating',
     },
     {
       label: <Text type='heading5-regular'>Quản lý</Text>,
@@ -64,25 +64,22 @@ const getItemsMenu: (categories: any[]) => MenuProps['items'] = (categories: any
 };
 const MainHeader: React.FC = () => {
   const { navigate, onNavSearch } = useCustomNavigate();
-  const [current, setCurrent] = useState('home-page');
   const dataParams = useGetParamsSearch();
   const { pathname } = useLocation();
   const category = useCategory();
 
   const onClick: MenuProps['onClick'] = (e) => {
-    setCurrent(e.key);
-
     if (e.key === 'home-page') {
       navigate(ROUTE_PATH.HOME_PAGE);
     }
     if (e.key === 'product') {
       navigate(ROUTE_PATH.PRODUCT);
     }
-    if (e.key === 'cart') {
-      navigate(ROUTE_PATH.CART);
+    if (e.key === 'product-hot') {
+      navigate(ROUTE_PATH.PRODUCT_HOT);
     }
-    if (e.key === 'introduce') {
-      navigate(ROUTE_PATH.CART);
+    if (e.key === 'rating') {
+      navigate(ROUTE_PATH.RATING);
     }
     if (e.key === 'admin') {
       navigate(ROUTE_PATH.ADMIN);
@@ -96,6 +93,16 @@ const MainHeader: React.FC = () => {
     });
   };
 
+  const onClickCategory = (e: any) => {
+    onNavSearch({
+      pathname: ROUTE_PATH.CATEGORY,
+      data: {
+        ...dataParams,
+        category_id: e?.id,
+        category_name: e?.name,
+      },
+    });
+  };
   return (
     <>
       <Row align={'middle'} className={styles.root}>
@@ -104,15 +111,23 @@ const MainHeader: React.FC = () => {
           placeholder='Tìm kiếm theo tên sản phẩm hoặc mã sản phẩm'
           onSearch={onSearch}
           enterButton
-          style={{ opacity: pathname === ROUTE_PATH.PRODUCT ? 0 : 1 }}
+          style={{
+            opacity:
+              pathname === ROUTE_PATH.PRODUCT ||
+              pathname === ROUTE_PATH.CATEGORY ||
+              pathname ||
+              ROUTE_PATH.PRODUCT_HOT
+                ? 0
+                : 1,
+          }}
         />
         <Button type='primary'>Đăng nhập</Button>
       </Row>
       <Menu
         onClick={onClick}
-        selectedKeys={[current]}
+        selectedKeys={[pathname.split('/')[1]]}
         mode='horizontal'
-        items={getItemsMenu(formatItemMenu(category))}
+        items={getItemsMenu(formatItemMenu(category, onClickCategory))}
         className={styles.menu}
       />
     </>

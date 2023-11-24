@@ -8,10 +8,12 @@ const ListProduct = ({
   data,
   title,
   tag,
+  span,
 }: {
   data: IProductData[];
   title?: string;
   tag: string;
+  span?: any;
 }) => {
   return (
     <>
@@ -19,7 +21,7 @@ const ListProduct = ({
       <Row style={{ width: '100%' }} gutter={[24, 24]}>
         {data.map((data: IProductData, index) => {
           return (
-            <Col key={index} span={6}>
+            <Col key={`${index} - product - ${tag}`} span={span ?? 6}>
               <ItemProduct {...data} tag={tag} />
             </Col>
           );

@@ -32,6 +32,7 @@ const ItemProduct = (props: IItemNewBook) => {
     onClickTag,
     total_rating,
     tag,
+    price_discount,
   } = props;
 
   const { navigate } = useCustomNavigate();
@@ -66,7 +67,7 @@ const ItemProduct = (props: IItemNewBook) => {
             color='neutral-white'
             className={classNames(styles.tag, {
               [styles.green]: tag === 'Sản phẩm mới',
-              [styles.red]: tag === 'Đánh giá cao',
+              [styles.red]: tag === 'Sản phẩm hot',
             })}
             onClick={onClickTag}
           >
@@ -89,6 +90,11 @@ const ItemProduct = (props: IItemNewBook) => {
           <Text type='heading5-bold' color='text-primary'>
             {formatCurrencyVND(priceDiscount)}
           </Text>
+          {price_discount && (
+            <Text type='body-regular' color='text-secondary' className={styles.textDiscount}>
+              {formatCurrencyVND(price)}
+            </Text>
+          )}
         </Row>
         <Text type='heading5-medium' color='text-secondary' className={styles.authors}>
           {description}
