@@ -1,6 +1,7 @@
 import 'antd/dist/reset.css';
 import './styles/globals.scss';
 import './i18n';
+import '@splidejs/react-splide/css';
 
 import React from 'react';
 

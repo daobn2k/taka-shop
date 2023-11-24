@@ -2,11 +2,15 @@ import { Suspense } from 'react';
 
 import { Outlet } from 'react-router-dom';
 
+import { useCategoryInitial } from '@/store/category/useCategoryInitial';
+
+import MainHeader from './MainHeader/MainHeader';
+
 const MainLayout = () => {
+  useCategoryInitial();
   return (
     <Suspense fallback={undefined}>
-      <h1>Main Header</h1>
-
+      <MainHeader />
       <Outlet />
     </Suspense>
   );

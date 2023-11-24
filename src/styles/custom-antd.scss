@@ -1,20 +1,41 @@
-.ant-form-item-required {
-  display: inline-flex;
-  flex-direction: row-reverse;
-  color: #262626 !important;
-
-  &::before {
-    margin-left: 4px;
-  }
-  &::after {
-    display: none;
+.ant-rate-star {
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }
 
-input {
-  height: 40px;
-}
+// Pagination
+.ant-pagination {
+  margin: 16px 0 0 !important;
+  .ant-pagination-item {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border-color: #d9d9d9 !important;
+    a {
+      color: #262626 !important;
+    }
+  }
 
-.ant-form-item {
-  margin: 0 0 20px;
+  .ant-pagination-next,
+  .ant-pagination-prev {
+    button {
+      border-color: #d9d9d9 !important;
+    }
+  }
+
+  .ant-pagination-item.ant-pagination-item-active {
+    border-color: #203d99 !important;
+    a {
+      color: #203d99 !important;
+    }
+  }
+
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    .ant-pagination-item-link {
+      color: var(--text-primary) !important;
+    }
+  }
 }

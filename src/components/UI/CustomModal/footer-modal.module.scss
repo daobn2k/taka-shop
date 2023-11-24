@@ -1,0 +1,40 @@
+.buttonFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 24px;
+  .buttonCancel,
+  .buttonNext {
+    width: fit-content;
+    padding: 8px 16px !important;
+    border-radius: 6px;
+
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.buttonCancel {
+  background-color: var(--white);
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: center;
+
+  color: var(--primary-black);
+
+  border: 1px solid var(--neutral-gray-5);
+
+  &:hover,
+  &:focus {
+    background-color: var(--white);
+  }
+}
+
+.buttonNext {
+}

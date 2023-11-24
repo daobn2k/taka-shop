@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
           ({ bold, cyan, green }) => {
             return {
               text: `  ${green('➜')}  ${bold('Font Icon:')} ${bold(
-                cyan('http://localhost:4005/public/t4font/index.html'),
+                cyan('http://localhost:4006/public/t4font/index.html'),
               )}`,
             };
           },
@@ -74,10 +74,11 @@ export default defineConfig(({ mode }) => {
       sourcemap: isDev,
     },
     server: {
-      port: 4005,
+      port: 4006,
+      cors: true,
     },
     preview: {
-      port: 4005,
+      port: 4006,
     },
   };
 });

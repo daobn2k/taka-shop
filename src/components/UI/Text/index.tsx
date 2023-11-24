@@ -3,6 +3,8 @@ import React from 'react';
 
 import classNames from 'classnames';
 
+import { TColor } from './type';
+
 interface TextProps {
   children: React.ReactNode;
   type?:
@@ -21,47 +23,7 @@ interface TextProps {
     | 'body-underline'
     | 'caption-regular'
     | (string & {});
-  color?:
-    | 'cwhite'
-    | 'cblack'
-    | 'primary-lighter'
-    | 'primary-light'
-    | 'primary-main'
-    | 'primary-dark'
-    | 'primary-darker'
-    | 'secondary-lightest'
-    | 'secondary-lighter'
-    | 'secondary-light'
-    | 'secondary-main'
-    | 'secondary-dark'
-    | 'neutral-white'
-    | 'neutral-gray-2'
-    | 'neutral-gray-3'
-    | 'neutral-gray-4'
-    | 'neutral-gray-5'
-    | 'neutral-gray-6'
-    | 'neutral-gray-7'
-    | 'neutral-gray-8'
-    | 'neutral-gray-9'
-    | 'neutral-gray-10'
-    | 'success-background'
-    | 'success-hover'
-    | 'success-main'
-    | 'success-active'
-    | 'warning-background'
-    | 'warning-hover'
-    | 'warning-main'
-    | 'warning-active'
-    | 'error-background'
-    | 'error-hover'
-    | 'error-main'
-    | 'error-active'
-    | 'link-1'
-    | 'link-2'
-    | 'link-3'
-    | 'link-4'
-    | 'link-5'
-    | (string & {});
+  color?: TColor;
   disabled?: boolean;
   state?: null | 'disable';
   className?: string | (string & {});

@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 16px;
+
+  .title {
+    cursor: pointer;
+    &:hover {
+      color: var(--primary-main);
+      text-decoration: underline;
+    }
+  }
+}

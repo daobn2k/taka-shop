@@ -1,0 +1,27 @@
+.root {
+  padding: 16px;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+button {
+  width: fit-content;
+  height: 32px;
+}
+:global {
+  .ant-input-wrapper,
+  .ant-input-group-wrapper {
+    max-width: 400px;
+  }
+}
+
+.menu {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: unset;
+  border-bottom: 1px solid #f5f5f5;
+}

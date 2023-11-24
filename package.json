@@ -19,6 +19,8 @@
     "release": "bumpp -r"
   },
   "dependencies": {
+    "@splidejs/react-splide": "^0.7.12",
+    "@splidejs/splide": "^4.1.4",
     "ahooks": "^3.7.8",
     "antd": "^5.10.2",
     "brainless-token-manager": "^1.3.3",

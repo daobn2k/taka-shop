@@ -1,0 +1,39 @@
+.modal {
+  width: 426px;
+
+  .content {
+    gap: 4px;
+    padding-left: 38px;
+    color: var(--text-primary);
+
+    p,
+    span {
+      word-wrap: break-word;
+    }
+  }
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .titleHeader {
+    display: flex;
+    gap: 16px;
+  }
+
+  :global {
+    .ant-modal-content {
+      width: 426px;
+      padding: 20px 24px !important;
+      background-color: var(--background-pop-over);
+    }
+
+    .ant-modal-title {
+      background-color: var(--background-pop-over);
+    }
+    .ant-modal-footer {
+      display: none;
+    }
+  }
+}
