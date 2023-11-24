@@ -1,3 +1,4 @@
+/* eslint-disable valid-typeof */
 const localStorageUtils = {
   get: (key: string) => {
     try {
