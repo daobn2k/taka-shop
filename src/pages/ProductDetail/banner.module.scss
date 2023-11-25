@@ -1,0 +1,21 @@
+.banner {
+  :global {
+    .splide {
+      padding: 0;
+      .splide__slide {
+        margin: 0 12px;
+        .ant-image {
+          height: 100%;
+          width: 100%;
+          img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

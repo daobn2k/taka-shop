@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 
-import { Empty, Row, Spin } from 'antd';
+import { Breadcrumb, Empty, Row, Spin } from 'antd';
 
 import { IProductData } from '@/api/interface';
 import CustomPagination from '@/components/UI/CustomPagination';
@@ -48,31 +48,45 @@ const Products = () => {
     onNavSearch({ pathname: ROUTE_PATH.PRODUCT, data: payload });
   };
   return (
-    <div className={styles.root}>
-      <Spin spinning={loading} className={styles.spin}>
-        <SelectionHeaderHome title={dataParams?.category_name ?? 'Sản phẩm mới'}>
-          <FormSearch onSearch={onSearch} />
-        </SelectionHeaderHome>
-        {products?.length > 0 && (
-          <>
-            <ListProduct data={products} tag='Sản phẩm mới' />
+    <>
+      <Row style={{ margin: '0 32px', marginTop: 24 }}>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Trang chủ',
+            },
+            {
+              title: dataParams?.category_name ?? 'Sản phẩm mới',
+            },
+          ]}
+        />
+      </Row>
+      <div className={styles.root}>
+        <Spin spinning={loading} className={styles.spin}>
+          <SelectionHeaderHome title={dataParams?.category_name ?? 'Sản phẩm mới'}>
+            <FormSearch onSearch={onSearch} />
+          </SelectionHeaderHome>
+          {products?.length > 0 && (
+            <>
+              <ListProduct data={products} tag='Sản phẩm mới' span={5} gutter={[32, 24]} />
+              <Row align={'middle'} justify={'center'}>
+                <CustomPagination
+                  page={data?.meta?.pagination?.current_page}
+                  pageSize={data?.meta?.pagination?.per_page}
+                  total={data?.meta?.pagination?.total}
+                  onChange={onChangePage}
+                />
+              </Row>
+            </>
+          )}
+          {products?.length <= 0 && (
             <Row align={'middle'} justify={'center'}>
-              <CustomPagination
-                page={data?.meta?.pagination?.current_page}
-                pageSize={data?.meta?.pagination?.per_page}
-                total={data?.meta?.pagination?.total}
-                onChange={onChangePage}
-              />
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có sản phẩm mới' />
             </Row>
-          </>
-        )}
-        {products?.length <= 0 && (
-          <Row align={'middle'} justify={'center'}>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có sản phẩm mới' />
-          </Row>
-        )}
-      </Spin>
-    </div>
+          )}
+        </Spin>
+      </div>
+    </>
   );
 };
 

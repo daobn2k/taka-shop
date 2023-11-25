@@ -1,0 +1,19 @@
+.rowItem {
+  margin-bottom: 16px;
+}
+
+.active {
+  border: 1px solid var(--primary-main);
+  color: var(--primary-main);
+}
+
+.rootCommentRate {
+  form {
+    width: 100%;
+  }
+}
+
+.listItem {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+}
