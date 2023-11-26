@@ -10,7 +10,7 @@ import ModalLogin from '@/components/UI/ModalLogin';
 import Text from '@/components/UI/Text';
 import { useCart } from '@/hooks/useCart';
 import { useLogin } from '@/hooks/useLogin';
-import { useGetProductShow } from '@/service.ts/product';
+import { useGetProductShow } from '@/service/product';
 import { ICart } from '@/store/cart/cart';
 import { formatCurrencyVND } from '@/utils/common';
 

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { localStorageUtils } from '@/utils/local-storage-utils';
+import { useProfile } from '@/store/profile/useProfile';
 
 export const useLogin = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const profile = useProfile();
 
   useEffect(() => {
-    const profile = localStorageUtils.get('profile');
     setIsLogin(!!profile);
-  }, []);
+  }, [profile]);
 
   return isLogin;
 };

@@ -1,5 +1,7 @@
 /* eslint-disable unicorn/prefer-number-properties */
 
+import dayjs from 'dayjs';
+
 import { ENumSort } from '@/api/interface';
 
 export const formatParamsSearch = (params: any) => Object.fromEntries(params);
@@ -32,7 +34,6 @@ export const formatFormValuesChange = (allFields: any) =>
   }, {});
 
 export const formatCurrencyVND = (amount: any) => {
-  // Chuyển đổi chuỗi thành số và kiểm tra xem có phải là một số hợp lệ không
   const numericAmount = Number.parseFloat(amount);
 
   if (isNaN(numericAmount)) {
@@ -40,11 +41,15 @@ export const formatCurrencyVND = (amount: any) => {
     return undefined;
   }
 
-  // Sử dụng toLocaleString để định dạng số thành định dạng tiền tệ VNĐ
   const formattedAmount = numericAmount.toLocaleString('vi-VN', {
     style: 'currency',
     currency: 'VND',
   });
 
   return formattedAmount;
+};
+
+export const formatDate = (date: string, format = 'HH:mm - DD/MM/YYYY') => {
+  const d = dayjs(date).format(format);
+  return d || '';
 };

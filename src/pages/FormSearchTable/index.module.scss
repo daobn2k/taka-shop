@@ -1,0 +1,30 @@
+.searchLabelWrap {
+  gap: 16px;
+
+  .inputSearch {
+    width: 264px;
+    :global {
+      .ant-input {
+        border-radius: unset;
+      }
+    }
+  }
+
+  .datePicker {
+    width: 256px;
+  }
+
+  :global {
+    .ant-form-item {
+      margin: 0;
+    }
+    .ant-form-item-control-input {
+      min-height: unset !important;
+    }
+    .ant-form-item .ant-input-affix-wrapper {
+      input {
+        border-radius: 0;
+      }
+    }
+  }
+}

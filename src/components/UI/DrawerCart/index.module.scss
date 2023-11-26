@@ -1,0 +1,23 @@
+.list {
+  li {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .rowItem {
+    display: flex;
+    flex-direction: column;
+    .textThrough {
+      text-decoration: line-through;
+    }
+  }
+
+  :global {
+    .ant-avatar {
+      margin-right: 24px;
+    }
+    .ant-list-item {
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+    }
+  }
+}

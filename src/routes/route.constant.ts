@@ -12,3 +12,18 @@ export const ROUTE_PATH = {
   PRODUCT_HOT: '/product-hot',
   RATING: '/rating',
 };
+
+export const ADMIN_ROUTE_PATH = {
+  ADMIN_CATEGORY: '/admin/category',
+  ADMIN_PRODUCT: '/admin/product',
+  ADMIN_ORDER: '/admin/order',
+  ADMIN_FAQS: '/admin/faqs',
+  ADMIN_DASHBOARD: '/admin/dashboard',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_INFORMATION: '/admin/information',
+  MODIFY_PRODUCT: '/admin/product/modify',
+  MODIFY_USER: '/admin/users/modify',
+  MODIFY_CATEGORY: '/admin/category/modify',
+  MODIFY_FAQS: '/admin/faqs/modify',
+  MODIFY_ORDER: '/admin/order/modify',
+};

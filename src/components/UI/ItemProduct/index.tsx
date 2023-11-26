@@ -1,10 +1,11 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 
-import { Image, Rate, Row, Skeleton } from 'antd';
+import { Image, Rate, Row, Skeleton, message } from 'antd';
 import classNames from 'classnames';
 
-import { IProductData } from '@/api/interface';
+import { IProductData, TProductSize } from '@/api/interface';
 import { useCustomNavigate } from '@/hooks/useCustomNavigate';
+import { useLogin } from '@/hooks/useLogin';
 import { ROUTE_PATH } from '@/routes/route.constant';
 import { formatCurrencyVND } from '@/utils/common';
 
@@ -16,10 +17,13 @@ interface IItemNewBook extends IProductData {
   loading?: boolean;
   is_liked?: boolean;
   onLike?: () => void;
-  onAddCart?: () => void;
+  onAddCart?: (size: TProductSize) => void;
   onClickTag?: () => void;
   tag?: string;
+  onOpenLogin: () => void;
 }
+const sizes: TProductSize[] = ['S', 'M', 'L', 'XL', 'XXl'];
+
 const ItemProduct = (props: IItemNewBook) => {
   const {
     name = '',
@@ -33,18 +37,23 @@ const ItemProduct = (props: IItemNewBook) => {
     total_rating,
     tag,
     price_discount,
+    onAddCart,
+    onOpenLogin,
   } = props;
-
+  const [size, setSize] = useState<TProductSize>();
   const { navigate } = useCustomNavigate();
-  // const refModalLogin = useRef<any>();
+  const isLogin = useLogin();
 
-  // const onClick = () => {
-  //   if (!isLogin) {
-  //     return refModalLogin.current.onOpen();
-  //   }
-
-  //   onAddCart && onAddCart();
-  // };
+  const onClick = () => {
+    if (!size) {
+      return message.error('Chọn size trước khi đặt hàng');
+    }
+    if (!isLogin) {
+      message.error('Đăng nhập để thực hiện tính này năng');
+      return onOpenLogin();
+    }
+    onAddCart && onAddCart(size);
+  };
   const priceDiscount = useMemo(() => {
     return Number(price);
   }, [price]);
@@ -73,6 +82,27 @@ const ItemProduct = (props: IItemNewBook) => {
           >
             {tag}
           </Text>
+          <Row align={'middle'} style={{ gap: 16 }} className={classNames(styles.addSize)}>
+            {sizes.map((s: TProductSize, index) => (
+              <div key={`size-${index}`}>
+                <Text
+                  onClick={() => setSize(s)}
+                  className={classNames(styles.textSize, { [styles.activeSize]: size === s })}
+                >
+                  {s}
+                  &nbsp;
+                </Text>
+              </div>
+            ))}
+          </Row>
+          <Text
+            type='body-regular'
+            color='neutral-white'
+            className={classNames(styles.addToCart)}
+            onClick={onClick}
+          >
+            Thêm vào giỏ hàng
+          </Text>
         </div>
         <Row align={'middle'} justify={'space-between'}>
           <Text
@@ -90,7 +120,7 @@ const ItemProduct = (props: IItemNewBook) => {
           <Text type='heading5-bold' color='text-primary'>
             {formatCurrencyVND(priceDiscount)}
           </Text>
-          {price_discount && (
+          {price_discount > 0 && (
             <Text type='body-regular' color='text-secondary' className={styles.textDiscount}>
               {formatCurrencyVND(price)}
             </Text>
@@ -100,13 +130,6 @@ const ItemProduct = (props: IItemNewBook) => {
           {description}
         </Text>
       </Skeleton>
-
-      {/* <ModalConfirm
-        ref={refModalLogin}
-        title={'Thêm vào giỏ hàng'}
-        onClickAction={onAction}
-        text={'Vui lòng đăng nhập để thêm vào giỏ hàng'}
-      /> */}
     </div>
   );
 };

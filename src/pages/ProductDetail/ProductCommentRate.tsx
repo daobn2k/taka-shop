@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import Button from '@/components/UI/Button';
 import CustomPagination from '@/components/UI/CustomPagination';
 import Text from '@/components/UI/Text';
-import { useAddRateCommentProduct, useGetRateComment } from '@/service.ts/product';
+import { useAddRateCommentProduct, useGetRateComment } from '@/service/product';
 import { useProfile } from '@/store/profile/useProfile';
 
 import styles from './index.module.scss';

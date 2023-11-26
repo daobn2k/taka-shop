@@ -16,10 +16,11 @@ export type TProfile = {
   phone?: string;
   email: string;
   status?: EStatusProfile;
-  role?: string;
+  role_id: number;
+  role_name: string;
   address?: string;
   gender?: string;
-  avatar?: string;
+  avatar: string;
 };
 
 // @ts-ignore

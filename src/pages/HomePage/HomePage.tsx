@@ -11,7 +11,7 @@ import { Col, Row } from 'antd';
 import { IProductData } from '@/api/interface';
 import ListProduct from '@/components/UI/ListProduct/ListProduct';
 import Text from '@/components/UI/Text';
-import { useGetProduct, useGetProductHot } from '@/service.ts/product';
+import { useGetProduct, useGetProductHot } from '@/service/product';
 
 import Banner from './Banner';
 import styles from './index.module.scss';

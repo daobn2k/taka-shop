@@ -9,7 +9,7 @@ import SelectionHeaderHome from '@/components/UI/SelectionHeaderHome';
 import { useCustomNavigate } from '@/hooks/useCustomNavigate';
 import { useGetParamsSearch } from '@/hooks/useGetParamsSearch';
 import { ROUTE_PATH } from '@/routes/route.constant';
-import { useGetProduct } from '@/service.ts/product';
+import { useGetProduct } from '@/service/product';
 
 import styles from './index.module.scss';
 import FormSearch from '../Products/FormSearch';

@@ -69,6 +69,9 @@ export const useCart = () => {
   };
 
   const cartByUser = useMemo(() => {
+    console.log(cart, 'cart');
+    console.log(profile, 'profile');
+
     return profile && cart?.length > 0 ? cart.filter((c) => c.userid === profile?.id) : [];
   }, [cart, profile]);
 

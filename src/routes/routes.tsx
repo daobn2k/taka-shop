@@ -2,10 +2,12 @@ import React, { Suspense } from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
 
+import AdminLayout from '@/layout/AdminLayout/AdminLayout';
 import AppLayout from '@/layout/AppLayout/AppLayout';
 import MainLayout from '@/layout/MainLayout/MainLayout';
+import ProductDetail from '@/pages/ProductDetail/ProductDetail';
 
-import { ROUTE_PATH } from './route.constant';
+import { ADMIN_ROUTE_PATH, ROUTE_PATH } from './route.constant';
 
 const Report = React.lazy(() => import('@/pages/Report/Report'));
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage'));
@@ -13,6 +15,20 @@ const ProductPage = React.lazy(() => import('@/pages/Products/Products'));
 const CategoryPage = React.lazy(() => import('@/pages/Products/Products'));
 const ProductHotPage = React.lazy(() => import('@/pages/ProductsHot/ProductsHot'));
 
+const AdminProductPage = React.lazy(() => import('@/pages/ProductManagement/Products/Products'));
+const AdminModifyProductPage = React.lazy(
+  () => import('@/pages/ProductManagement/Products/components/AddProduct'),
+);
+const AdminCategoryPage = React.lazy(() => import('@/pages/ProductManagement/Category/Category'));
+const AdminModifyCategory = React.lazy(
+  () => import('@/pages/ProductManagement/Category/components/AddCategory'),
+);
+
+const AdminUsersPage = React.lazy(() => import('@/pages/Users/Users'));
+const AdminModifyUser = React.lazy(() => import('@/pages/Users/components/AddUser'));
+
+const AdminOrderPage = React.lazy(() => import('@/pages/Order/Order'));
+const AdminModifyOrder = React.lazy(() => import('@/pages/Order/components/ViewOrder'));
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -58,6 +74,107 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={undefined}>
                 <ProductHotPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ROUTE_PATH.PRODUCT}/:id`,
+            element: (
+              <Suspense fallback={undefined}>
+                <ProductDetail />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_PRODUCT,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminProductPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.MODIFY_PRODUCT,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyProductPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ADMIN_ROUTE_PATH.MODIFY_PRODUCT}/:id`,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyProductPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.MODIFY_CATEGORY,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyCategory />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ADMIN_ROUTE_PATH.MODIFY_CATEGORY}/:id`,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyCategory />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_CATEGORY,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminCategoryPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.MODIFY_USER,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyUser />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ADMIN_ROUTE_PATH.MODIFY_USER}/:id`,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyUser />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_USERS,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminUsersPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ADMIN_ROUTE_PATH.MODIFY_ORDER}/:id`,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminModifyOrder />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_ORDER,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminOrderPage />
               </Suspense>
             ),
           },

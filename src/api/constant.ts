@@ -1,8 +1,15 @@
 export const API_PATH = {
+  // upload file
+  UPLOAD_FILE: '/uploadfile',
   // Auth
-  AUTH_LOGIN: '/auth/login',
+  AUTH_LOGIN: '/user/login',
   // Danh mục sản phẩm
   CATEGORY: '/category/index',
+  CATEGORY_ADD: '/category/store',
+  CATEGORY_UPDATE: (id: number) => '/category/update/' + id,
+  CATEGORY_DELETE: (id: number) => '/category/delete/' + id,
+  CATEGORY_SHOW: (id: number) => '/category/show/' + id,
+
   // Sản phẩm
   PRODUCT: '/product/index',
   PRODUCT_RELATED: '/product/related',
@@ -11,4 +18,24 @@ export const API_PATH = {
   PRODUCT_ADD: '/product/store',
   PRODUCT_UPDATE: (id: number) => '/product/update/' + id,
   PRODUCT_DELETE: (id: number) => '/product/delete/' + id,
+  ADD_FEEDBACK: '/feedback/store',
+  GET_FEEDBACK: '/feedback/index',
+  // USER
+  USER: '/user/index',
+  USER_ADD: '/user/store',
+  USER_UPDATE: (id: number) => '/user/update/' + id,
+  USER_DELETE: (id: number) => '/user/delete/' + id,
+  USER_SHOW: (id: number) => '/user/show/' + id,
+
+  // order
+  ORDER: '/order/index',
+  ORDERED_USER: '/order/ordered',
+  ORDERED_PURCHASE: '/order/purchase',
+
+  ORDER_SHOW: (id: number) => '/order/show/' + id,
+  ORDER_APPROVE: (id: number) => '/order/approve/' + id,
+  ORDER_SHIP: (id: number) => '/order/ship/' + id,
+  ORDER_CANCEL: (id: number) => '/order/cancel/' + id,
+  // Đặt hàng
+  CREATE_ORDER: '/order/store',
 };

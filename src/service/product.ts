@@ -24,6 +24,13 @@ interface IDataProduct {
   size: string;
 }
 
+export interface IPayloadCommentRate {
+  user_id: number;
+  comment: string;
+  product_id: number;
+  rate: number;
+}
+
 export const getProduct = (params: IParams) => {
   return request.get(API_PATH.PRODUCT, { params: formatParamsGetList(params) });
 };
@@ -49,6 +56,13 @@ export const updateProduct = (data: IDataProduct, id: number) => {
 };
 export const deleteProduct = (id: number) => {
   return request.delete(API_PATH.PRODUCT_DELETE(id));
+};
+
+export const addRateCommentProduct = (payload: IPayloadCommentRate) => {
+  return request.post(API_PATH.ADD_FEEDBACK, { data: payload });
+};
+export const getRateComment = (params: any) => {
+  return request.get(API_PATH.GET_FEEDBACK, { params });
 };
 
 export const useGetProduct = (options?: IOptions) => {
@@ -97,4 +111,11 @@ export const useDeleteProduct = (options?: IOptions) => {
     manual: true,
     ...options,
   });
+};
+
+export const useAddRateCommentProduct = (options?: IOptions) => {
+  return useRequest(addRateCommentProduct, { manual: true, ...options });
+};
+export const useGetRateComment = (options?: IOptions) => {
+  return useRequest(getRateComment, { manual: true, ...options });
 };

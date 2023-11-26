@@ -1,0 +1,48 @@
+.rootBtnSearch {
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  .btnSort {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    &:hover {
+      background-color: #e7ecff;
+    }
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    height: 32px;
+  }
+  .buttonAdd {
+    width: fit-content;
+
+    height: 32px;
+    padding: 8px 16px;
+    gap: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+  }
+  .btnCompleteSort {
+    height: 32px;
+
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: var(--primary-8, rgba(32, 61, 153, 0.08));
+    cursor: pointer;
+    max-width: fit-content;
+    margin-left: auto;
+  }
+}
