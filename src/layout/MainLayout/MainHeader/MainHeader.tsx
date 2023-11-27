@@ -8,6 +8,8 @@ import { useLocation } from 'react-router-dom';
 
 import Button from '@/components/UI/Button';
 import DrawerCart from '@/components/UI/DrawerCart';
+import ModalLogin from '@/components/UI/ModalLogin';
+import ModalLogout from '@/components/UI/ModalLogout/ModalLogout';
 import Text from '@/components/UI/Text';
 import { useCart } from '@/hooks/useCart';
 import { useCustomNavigate } from '@/hooks/useCustomNavigate';
@@ -141,9 +143,11 @@ const MainHeader: React.FC = () => {
     {
       key: 'logout',
       label: (
-        <Text type='body-regular' color='text-primary'>
-          Đăng xuất
-        </Text>
+        <ModalLogout>
+          <Text type='body-regular' color='text-primary'>
+            Đăng xuất
+          </Text>
+        </ModalLogout>
       ),
     },
   ];
@@ -164,7 +168,7 @@ const MainHeader: React.FC = () => {
                 : 1,
           }}
         />
-        {profile ? (
+        {profile?.id ? (
           <Row align={'middle'} style={{ flexDirection: 'column', gap: 4 }}>
             <Dropdown menu={{ items }} placement='bottomLeft'>
               <Avatar src={profile?.avatar} size={36} />
@@ -172,7 +176,9 @@ const MainHeader: React.FC = () => {
             <Text>{profile?.name}</Text>
           </Row>
         ) : (
-          <Button type='primary'>Đăng nhập</Button>
+          <ModalLogin>
+            <Button type='primary'>Đăng nhập</Button>
+          </ModalLogin>
         )}
       </Row>
       <Menu

@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo } from 'react';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Spin, message } from 'antd';
 import type { TableProps } from 'antd/es/table';
-import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 
+import { LIST_ACTIVE_USER } from '@/api/data';
 import CustomPagination from '@/components/UI/CustomPagination';
 import CustomTable from '@/components/UI/CustomTable';
 import HeaderListTable from '@/components/UI/HeaderListTable';
@@ -13,15 +14,15 @@ import { useCustomNavigate } from '@/hooks/useCustomNavigate';
 import FormSearchTable from '@/pages/FormSearchTable';
 import GroupButtonSortTable from '@/pages/GroupButtonSortTable';
 import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
-import { formatDate, formatParamsSearch } from '@/utils/common';
+import { formatParamsSearch } from '@/utils/common';
 
 import styles from './index.module.scss';
-import { useDelete, useGetListCategories } from './service';
+import { useDelete, useGetListUser } from './service';
 
-const Category = () => {
+const Users = () => {
   const [searchParams] = useSearchParams();
 
-  const { data, run, loading, refresh } = useGetListCategories();
+  const { data, run, loading, refresh } = useGetListUser();
   const { onNavSearch, navigate } = useCustomNavigate();
 
   const dataParams = useMemo(() => {
@@ -38,11 +39,11 @@ const Category = () => {
 
   const { run: onDele } = useDelete({
     onSuccess() {
-      message.success('Xóa thành công danh mục');
+      message.success('Xóa thành công người dùng');
       refresh();
     },
     onError() {
-      message.error('Xóa thành công danh mục');
+      message.error('Xóa thất bại người dùng');
     },
   });
 
@@ -53,21 +54,37 @@ const Category = () => {
   const columns = useMemo(() => {
     const defaultCols = [
       {
-        title: 'Tên thể loại',
+        title: 'Họ và tên',
         dataIndex: 'name',
         key: 'name',
-        width: 312,
+        width: 200,
       },
       {
-        title: 'Thời gian tạo',
-        dataIndex: 'created_at',
-        key: 'created_at',
-        sorter: (a: any, b: any) => dayjs(a.created_at).diff(dayjs(b.created_at)),
-        render: (date: string) => {
-          return formatDate(date);
-        },
-        width: 180,
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        width: 150,
       },
+      {
+        title: 'Số điện thoại',
+        dataIndex: 'phone',
+        key: 'phone',
+        width: 150,
+      },
+      {
+        title: 'Địa chỉ',
+        dataIndex: 'address',
+        key: 'address',
+        width: 150,
+      },
+      {
+        title: 'Trạng thái',
+        dataIndex: 'status',
+        key: 'status',
+        width: 150,
+        render: (status: any) => LIST_ACTIVE_USER.find((i) => i.id === status)?.label,
+      },
+
       {
         width: 140,
         align: 'center' as any,
@@ -80,9 +97,9 @@ const Category = () => {
             <div className={styles.divAction}>
               <EditOutlined
                 className={styles.icon}
-                onClick={() => navigate(`${ADMIN_ROUTE_PATH.MODIFY_CATEGORY}/${record?.id}`)}
+                onClick={() => navigate(`${ADMIN_ROUTE_PATH.MODIFY_USER}/${record.id}`)}
               />
-              <DeleteOutlined className={styles.icon} onClick={() => onDelete(record?.id)} />
+              <DeleteOutlined className={styles.icon} onClick={() => onDelete(record.id)} />
             </div>
           );
         },
@@ -99,7 +116,7 @@ const Category = () => {
       ];
     }
     return defaultCols;
-  }, [dragMode, dataParams, onDelete]);
+  }, [dragMode, dataParams, onDelete, navigate]);
 
   const onSearch = (value: any) => {
     const payload = {
@@ -107,11 +124,6 @@ const Category = () => {
       ...value,
     };
     onPushSearch(payload);
-  };
-
-  const onClickSort = (mode?: string) => {
-    const dataMode = mode ? { mode } : undefined;
-    onPushSearch(dataMode);
   };
 
   const onChangePage = (page: number) => {
@@ -133,21 +145,18 @@ const Category = () => {
 
   const onPushSearch = (payload: any) => {
     onNavSearch({
-      pathname: ADMIN_ROUTE_PATH.ADMIN_CATEGORY,
+      pathname: ADMIN_ROUTE_PATH.MODIFY_USER,
       data: payload,
     });
   };
   return (
     <Spin spinning={loading}>
       <div className={styles.wrap}>
-        <HeaderListTable title='Danh sách danh mục' />
+        <HeaderListTable title='Danh sách FAQS' />
         <div className={styles.mainKeyword}>
           <div className={styles.filterList}>
             {!dragMode && <FormSearchTable onSearch={onSearch} />}
-            <GroupButtonSortTable
-              onClickAdd={() => navigate(ADMIN_ROUTE_PATH.MODIFY_CATEGORY)}
-              onClickSort={onClickSort}
-            />
+            <GroupButtonSortTable onClickAdd={() => navigate(ADMIN_ROUTE_PATH.MODIFY_USER)} />
           </div>
           <CustomTable
             dataSource={data?.data}
@@ -169,4 +178,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Users;

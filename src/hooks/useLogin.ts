@@ -7,7 +7,7 @@ export const useLogin = () => {
   const profile = useProfile();
 
   useEffect(() => {
-    setIsLogin(!!profile);
+    setIsLogin(!!profile?.id);
   }, [profile]);
 
   return isLogin;

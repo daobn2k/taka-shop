@@ -53,3 +53,14 @@ export const formatDate = (date: string, format = 'HH:mm - DD/MM/YYYY') => {
   const d = dayjs(date).format(format);
   return d || '';
 };
+
+export const formatUrlLeanCode = (payload: any) => {
+  const formBody = [];
+  for (const property in payload) {
+    const encodedKey = encodeURIComponent(property);
+    const encodedValue = encodeURIComponent(payload[property]);
+    formBody.push(encodedKey + '=' + encodedValue);
+  }
+
+  return formBody;
+};

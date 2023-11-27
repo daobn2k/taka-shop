@@ -36,7 +36,7 @@ const items: MenuItem[] = [
   {
     key: 'users',
     icon: '',
-    label: <Link to={ADMIN_ROUTE_PATH.ADMIN_USERS}>Danh sách Người dùng</Link>,
+    label: <Link to={ADMIN_ROUTE_PATH.ADMIN_USERS}>Danh sách người dùng</Link>,
   },
   {
     key: 'faqs',

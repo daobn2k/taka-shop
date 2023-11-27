@@ -12,7 +12,7 @@ export const useCart = () => {
   const profile = useProfile();
 
   const onAddCart = (product: IProductData, quantity?: number, size?: TProductSize) => {
-    const newCart = [...cart]; // Tạo một bản sao của giỏ hàng để tránh ảnh hưởng trực tiếp
+    const newCart = cart ? [...cart] : []; // Tạo một bản sao của giỏ hàng để tránh ảnh hưởng trực tiếp
     const existingProduct = newCart?.find(
       (item: ICart) => item.id === product.id && item?.size === size && profile?.id === item.userid,
     );
@@ -69,9 +69,6 @@ export const useCart = () => {
   };
 
   const cartByUser = useMemo(() => {
-    console.log(cart, 'cart');
-    console.log(profile, 'profile');
-
     return profile && cart?.length > 0 ? cart.filter((c) => c.userid === profile?.id) : [];
   }, [cart, profile]);
 

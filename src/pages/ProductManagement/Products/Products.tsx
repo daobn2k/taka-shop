@@ -2,11 +2,10 @@
 import { useEffect, useMemo } from 'react';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Spin, message } from 'antd';
+import { Avatar, Spin, message } from 'antd';
 import type { TableProps } from 'antd/es/table';
 import { useSearchParams } from 'react-router-dom';
 
-import { LIST_STATUS_PRODUCT } from '@/api/data';
 import CustomPagination from '@/components/UI/CustomPagination';
 import CustomTable from '@/components/UI/CustomTable';
 import HeaderListTable from '@/components/UI/HeaderListTable';
@@ -54,10 +53,24 @@ const Products = () => {
   const columns = useMemo(() => {
     const defaultCols = [
       {
+        title: 'Mã sản phẩm',
+        dataIndex: 'code',
+        key: 'code',
+        width: 125,
+      },
+      {
         title: 'Tên sản phẩm',
         dataIndex: 'name',
         key: 'name',
         width: 200,
+      },
+      {
+        title: 'Ảnh sản phẩm',
+        dataIndex: 'image',
+        key: 'image',
+        width: 100,
+        align: 'center',
+        render: (image: string) => <Avatar src={image} size={96} shape='square' />,
       },
       {
         title: 'Thông tin sản phẩm',
@@ -73,25 +86,6 @@ const Products = () => {
           return formatDate(date);
         },
         width: 180,
-      },
-      {
-        title: 'Người Tạo',
-        dataIndex: 'create_uid',
-        key: 'create_uid',
-        render: (create_uid: any) => {
-          return create_uid?.name;
-        },
-        width: 232,
-      },
-      {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        key: 'status',
-        render: (status: any) => {
-          const label = LIST_STATUS_PRODUCT?.find((e) => e.id === status)?.label;
-          return label ?? '';
-        },
-        width: 100,
       },
       {
         width: 140,

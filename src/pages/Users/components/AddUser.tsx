@@ -11,6 +11,7 @@ import InputField from '@/components/UI/InputField';
 import InputSelect from '@/components/UI/InputSelect';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
 import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
+import { formatUrlLeanCode } from '@/utils/common';
 import { REG_PASSWORD } from '@/utils/reg';
 
 import styles from './add-user.module.scss';
@@ -23,7 +24,7 @@ const AddUser = () => {
 
   const { run: onAdd, loading: loadingAdd } = useAdd({
     onSuccess(res) {
-      if (res?.result === 'SUCCESS') {
+      if (res?.data) {
         message.success(res.message);
         navigate(ADMIN_ROUTE_PATH.ADMIN_USERS);
       } else {
@@ -37,8 +38,10 @@ const AddUser = () => {
 
   const { run: onEdit, loading: loadingEdit } = useUpdate({
     onSuccess(res) {
-      message.success(res.message ?? 'Chỉnh sửa thành công');
-      navigate(ADMIN_ROUTE_PATH.ADMIN_USERS);
+      if (res?.data) {
+        message.success(res.message ?? 'Chỉnh sửa thành công');
+        navigate(ADMIN_ROUTE_PATH.ADMIN_USERS);
+      }
     },
     onError() {
       message.error('Chỉnh sửa thất bại');
@@ -57,10 +60,19 @@ const AddUser = () => {
     payload.append('address', values.address);
     payload.append('gender', values.gender);
     payload.append('role_id', 1);
-    payload.append('avatar', '');
     if (id) {
-      return onEdit(id, payload);
+      const data = formatUrlLeanCode({
+        email: values.email,
+        name: values.name,
+        phone: values.phone,
+        address: values.address,
+        gender: values.gender,
+        role_id: 1,
+      });
+      return onEdit(id, data);
     }
+    payload.append('password', values?.password);
+    payload.append('password_confirmation', values.password);
     onAdd(payload);
   };
 
@@ -112,19 +124,22 @@ const AddUser = () => {
                   <InputField label='Email' require placeholder='Nhập email' />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  name='password'
-                  rules={[{ required: true, message: 'Nhập mật khẩu' }, validatePassword]}
-                >
-                  <InputField
-                    label='Mật khẩu'
-                    require
-                    placeholder='Nhập mật khẩu'
-                    type='password'
-                  />
-                </Form.Item>
-              </Col>
+              {!id && (
+                <Col span={12}>
+                  <Form.Item
+                    name='password'
+                    rules={[{ required: true, message: 'Nhập mật khẩu' }, validatePassword]}
+                  >
+                    <InputField
+                      label='Mật khẩu'
+                      require
+                      placeholder='Nhập mật khẩu'
+                      type='password'
+                    />
+                  </Form.Item>
+                </Col>
+              )}
+
               <Col span={12}>
                 <Form.Item name='name' rules={[{ required: true, message: 'Nhập họ và tên' }]}>
                   <InputField label='Họ và tên' require placeholder='Nhập họ và tên' />
@@ -155,7 +170,7 @@ const AddUser = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <Form.Item name='status' rules={[{ required: true, message: 'Chọn trạng thái' }]}>
                   <InputSelect
                     label='Trạng thái'
@@ -164,7 +179,7 @@ const AddUser = () => {
                     options={LIST_ACTIVE_USER}
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
             </Row>
           </WrapperInfoDetail>
         </div>

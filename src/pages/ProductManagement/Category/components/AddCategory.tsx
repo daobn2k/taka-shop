@@ -7,7 +7,7 @@ import FooterModal from '@/components/UI/CustomModal/FooterModal';
 import HeaderListTable from '@/components/UI/HeaderListTable';
 import InputField from '@/components/UI/InputField';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
-import { ROUTE_PATH } from '@/routes/route.constant';
+import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
 import { localStorageUtils } from '@/utils/local-storage-utils';
 
 import styles from './add-category.module.scss';
@@ -19,8 +19,8 @@ const AddCategory = () => {
   const [form] = Form.useForm();
   const { run: onAdd } = useAdd({
     onSuccess(res) {
-      message.success(res.message);
-      navigate(ROUTE_PATH.CATEGORY);
+      message.success(res.message ?? 'Tạo mới thành công');
+      navigate(ADMIN_ROUTE_PATH.ADMIN_CATEGORY);
     },
     onError() {
       message.error('Tạo mới thất bại');
@@ -29,8 +29,8 @@ const AddCategory = () => {
 
   const { run: onEdit } = useUpdate({
     onSuccess(res) {
-      message.success(res.message);
-      navigate(ROUTE_PATH.CATEGORY);
+      message.success(res.message ?? 'Chỉnh sửa thành công');
+      navigate(ADMIN_ROUTE_PATH.ADMIN_CATEGORY);
     },
     onError() {
       message.error('Chỉnh sửa thất bại');
@@ -38,7 +38,7 @@ const AddCategory = () => {
   });
 
   const onCancel = () => {
-    navigate(ROUTE_PATH.CATEGORY);
+    navigate(ADMIN_ROUTE_PATH.ADMIN_CATEGORY);
   };
 
   const onFinish = (values: any) => {
@@ -68,17 +68,14 @@ const AddCategory = () => {
   }, [id]);
   return (
     <div className={styles.root}>
-      <HeaderListTable title='Thêm thể loại sản phẩm' />
+      <HeaderListTable title='Thêm danh mục' />
       <WrapperInfoDetail>
         <Form form={form} onFinish={onFinish}>
-          <Form.Item
-            name='name'
-            rules={[{ required: true, message: 'Nhập tên thể loại sản phẩm' }]}
-          >
-            <InputField label='Tên thể loại sản phẩm' require />
+          <Form.Item name='name' rules={[{ required: true, message: 'Nhập tên danh mục' }]}>
+            <InputField label='Tên danh mục' require />
           </Form.Item>
           <Form.Item name='description'>
-            <InputField label='Thông tin thể loại sản phẩm' />
+            <InputField label='Thông tin danh mục' />
           </Form.Item>
           <Form.Item noStyle>
             <FooterModal onCancel={onCancel} />

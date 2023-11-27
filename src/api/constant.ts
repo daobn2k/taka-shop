@@ -3,6 +3,8 @@ export const API_PATH = {
   UPLOAD_FILE: '/uploadfile',
   // Auth
   AUTH_LOGIN: '/user/login',
+  AUTH_LOGOUT: '/user/logout',
+  CHANGE_PASSWORD: (id: any) => `/user/${id}/change-password`,
   // Danh mục sản phẩm
   CATEGORY: '/category/index',
   CATEGORY_ADD: '/category/store',
@@ -37,5 +39,7 @@ export const API_PATH = {
   ORDER_SHIP: (id: number) => '/order/ship/' + id,
   ORDER_CANCEL: (id: number) => '/order/cancel/' + id,
   // Đặt hàng
+
+  FAQS: '/faq/index',
   CREATE_ORDER: '/order/store',
 };

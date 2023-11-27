@@ -11,11 +11,7 @@ import styles from './index.module.scss';
 const { RangePicker } = DatePicker;
 
 interface IProps {
-  onSearch: (value: {
-    search: string;
-    start_created_date: string;
-    end_created_date: string;
-  }) => void;
+  onSearch: (value: { name: string; start_created_date: string; end_created_date: string }) => void;
   placeholder?: string;
 }
 
@@ -33,8 +29,8 @@ const FormSearchTable = ({ onSearch, placeholder }: IProps) => {
         values.end_created_date = v.date[1]?.format('YYYY-MM-DD');
       }
 
-      if (v.search) {
-        values.search = v.search;
+      if (v.name) {
+        values.name = v.name;
       }
 
       onSearch(values);
@@ -56,7 +52,7 @@ const FormSearchTable = ({ onSearch, placeholder }: IProps) => {
       <Form
         onFieldsChange={onFieldsChange.run}
         initialValues={{
-          search: dataParams?.search,
+          name: dataParams?.name,
           date:
             dataParams?.start_created_date && dataParams?.end_created_date
               ? [dayjs(dataParams?.start_created_date), dayjs(dataParams?.end_created_date)]
@@ -64,7 +60,7 @@ const FormSearchTable = ({ onSearch, placeholder }: IProps) => {
         }}
       >
         <Row align={'middle'} className={styles.searchLabelWrap}>
-          <Form.Item name='search' className={styles.inputSearch}>
+          <Form.Item name='name' className={styles.inputSearch}>
             <Input
               placeholder={placeholder ?? 'Tìm kiếm theo tên'}
               suffix={<Icon icon='t4font-ic-eva_search-fill' />}

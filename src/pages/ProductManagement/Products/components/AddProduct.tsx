@@ -15,7 +15,7 @@ import InputSelect from '@/components/UI/InputSelect';
 import InputTextArea from '@/components/UI/InputTextArea';
 import Text from '@/components/UI/Text';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
-import { ROUTE_PATH } from '@/routes/route.constant';
+import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
 import { base64ToBlob, beforeUpload, checkMb, isImage, toBase64 } from '@/utils/image';
 import { localStorageUtils } from '@/utils/local-storage-utils';
 
@@ -36,7 +36,7 @@ const AddProduct = () => {
   const { run: onAdd, loading: loadingAdd } = useAdd({
     onSuccess(res) {
       message.success(res.message);
-      navigate(ROUTE_PATH.PRODUCT);
+      navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
     },
     onError() {
       message.error('Tạo mới thất bại');
@@ -46,7 +46,7 @@ const AddProduct = () => {
   const { run: onEdit, loading: loadingEdit } = useUpdate({
     onSuccess(res) {
       message.success(res.message);
-      navigate(ROUTE_PATH.PRODUCT);
+      navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
     },
     onError() {
       message.error('Chỉnh sửa thất bại');
@@ -54,7 +54,7 @@ const AddProduct = () => {
   });
 
   const onCancel = () => {
-    navigate(ROUTE_PATH.PRODUCT);
+    navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
   };
 
   const onFinish = async (values: any) => {
@@ -62,19 +62,19 @@ const AddProduct = () => {
       return message.error('Vui lòng chọn ảnh sản phẩm');
     }
     const profile: any = localStorageUtils.get('profile');
-    console.log(dataImage, 'dataImage');
 
     const payload: any = new FormData();
     payload.append('name', values?.name);
     payload.append('category_id', values?.category_id?.id || values?.category_id);
-    payload.append('size', values?.size);
+    payload.append('size[]', values?.size);
     payload.append('price', values?.price);
     payload.append('quantity', values?.quantity);
     payload.append('code', values.code);
     payload.append('description', values.description);
     payload.append('price_discount', values.price_discount);
     payload.append('user_id', profile.id);
-    payload.append('image', dataImage.blobUrl);
+    payload.append('image', dataImage.file);
+    payload.append('color', 'BLACK');
 
     if (id) {
       return onEdit(id, payload);
@@ -181,7 +181,7 @@ const AddProduct = () => {
                     <Form.Item
                       name='name'
                       rules={[
-                        { required: true, message: 'Nhập tên thể loại sản phẩm' },
+                        { required: true, message: 'Nhập tên sản phẩm' },
                         { max: 256, message: 'Không nhập quá 256 kí tự' },
                       ]}
                     >
@@ -191,12 +191,12 @@ const AddProduct = () => {
                   <Col span={12}>
                     <Form.Item
                       name='category_id'
-                      rules={[{ required: true, message: 'Chọn thể loại sản phẩm' }]}
+                      rules={[{ required: true, message: 'Chọn danh mục' }]}
                     >
                       <InputSelect
-                        label='Thể loại sản phẩm'
+                        label='Danh mục sản phẩm'
                         options={optionsCategory}
-                        placeholder='Chọn trạng thái'
+                        placeholder='Chọn danh mục'
                         require
                       />
                     </Form.Item>
@@ -250,7 +250,7 @@ const AddProduct = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col span={12}>
+                  {/* <Col span={12}>
                     <Form.Item
                       name='status'
                       rules={[{ required: true, message: 'Chọn trạng thái' }]}
@@ -262,10 +262,10 @@ const AddProduct = () => {
                         require
                       />
                     </Form.Item>
-                  </Col>
+                  </Col> */}
 
                   <Col span={12}>
-                    <Form.Item name='size' rules={[{ required: true, message: 'Chọn trạng thái' }]}>
+                    <Form.Item name='size' rules={[{ required: true, message: 'Chọn kích cỡ' }]}>
                       <InputSelect
                         label='Kích cỡ'
                         options={LIST_SIZE}

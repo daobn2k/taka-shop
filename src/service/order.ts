@@ -10,7 +10,7 @@ export interface IPayloadLogin {
 }
 
 export const addOrder = (data: any) => {
-  return request.post(API_PATH.AUTH_LOGIN, { data });
+  return request.post(API_PATH.CREATE_ORDER, { data });
 };
 
 export const useAddOrder = (options?: IOptions) => {

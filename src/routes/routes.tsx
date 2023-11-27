@@ -29,6 +29,11 @@ const AdminModifyUser = React.lazy(() => import('@/pages/Users/components/AddUse
 
 const AdminOrderPage = React.lazy(() => import('@/pages/Order/Order'));
 const AdminModifyOrder = React.lazy(() => import('@/pages/Order/components/ViewOrder'));
+
+const AdminFAQSPage = React.lazy(() => import('@/pages/FAQS/FAQS'));
+
+const AdminInfomationPage = React.lazy(() => import('@/pages/Account/Account'));
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -175,6 +180,22 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={undefined}>
                 <AdminOrderPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_FAQS,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminFAQSPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_INFORMATION,
+            element: (
+              <Suspense fallback={undefined}>
+                <AdminInfomationPage />
               </Suspense>
             ),
           },
