@@ -18,7 +18,7 @@ export const API_PATH = {
   PRODUCT_HOT: '/product/hot',
   PRODUCT_SHOW: (id: number) => '/product/show/' + id,
   PRODUCT_ADD: '/product/store',
-  PRODUCT_UPDATE: (id: number) => '/product/update/' + id,
+  PRODUCT_UPDATE: (id?: any) => (id ? '/product/update/' + id : '/product/update/'),
   PRODUCT_DELETE: (id: number) => '/product/delete/' + id,
   ADD_FEEDBACK: '/feedback/store',
   GET_FEEDBACK: '/feedback/index',

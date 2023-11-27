@@ -61,6 +61,5 @@ export const formatUrlLeanCode = (payload: any) => {
     const encodedValue = encodeURIComponent(payload[property]);
     formBody.push(encodedKey + '=' + encodedValue);
   }
-
-  return formBody;
+  return formBody.join('&');
 };

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import Text from '@/components/UI/Text';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
+import { formatUrlLeanCode } from '@/utils/common';
 import { localStorageUtils } from '@/utils/local-storage-utils';
 
 import styles from './index.module.scss';
@@ -61,14 +62,7 @@ const Information = (props: IInformation) => {
       password: value.re_password,
     };
 
-    const formBody = [];
-    for (const property in payload) {
-      const encodedKey = encodeURIComponent(property);
-      const encodedValue = encodeURIComponent(payload[property]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-
-    run(payload, profile?.id);
+    run(formatUrlLeanCode(payload), profile?.id);
   };
   return (
     <Spin spinning={loading}>

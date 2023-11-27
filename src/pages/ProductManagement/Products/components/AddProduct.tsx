@@ -77,6 +77,7 @@ const AddProduct = () => {
     payload.append('color', 'BLACK');
 
     if (id) {
+      payload.append('product_id', id);
       return onEdit(id, payload);
     }
     onAdd(payload);
@@ -95,6 +96,7 @@ const AddProduct = () => {
           value: res?.data?.category?.data?.id,
           label: res?.data?.category?.data?.name,
         },
+        size: res?.data?.size[0].split(','),
       });
     },
     onError() {

@@ -83,7 +83,10 @@ export const useUpdate = (options?: IOptions) => {
   return useRequest(
     (id?: any, payload?: any) => {
       return privateRequest(request.put, API_PATH.USER_UPDATE(id), {
-        data: payload,
+        body: payload,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
       });
     },
     {

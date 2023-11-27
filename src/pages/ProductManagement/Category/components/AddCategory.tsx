@@ -8,7 +8,7 @@ import HeaderListTable from '@/components/UI/HeaderListTable';
 import InputField from '@/components/UI/InputField';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
 import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
-import { localStorageUtils } from '@/utils/local-storage-utils';
+import { formatUrlLeanCode } from '@/utils/common';
 
 import styles from './add-category.module.scss';
 import { useAdd, useGetDetail, useUpdate } from '../service';
@@ -42,13 +42,13 @@ const AddCategory = () => {
   };
 
   const onFinish = (values: any) => {
-    const profile: any = localStorageUtils.get('profile');
-    const payload = {
-      ...values,
-      create_uid: profile?.id,
-    };
+    const payload = new FormData();
+    payload.append('name', values.name);
+    payload.append('description', values?.description);
+
     if (id) {
-      return onEdit(id, payload);
+      const urlLeanCode = formatUrlLeanCode(values);
+      return onEdit(id, urlLeanCode);
     }
     onAdd(payload);
   };

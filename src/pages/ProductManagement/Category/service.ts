@@ -81,9 +81,12 @@ export const useGetDetail = (options?: IOptions) => {
 
 export const useUpdate = (options?: IOptions) => {
   return useRequest(
-    (id: any, payload: IFormAdd) => {
+    (id: any, payload: any) => {
       return privateRequest(request.put, API_PATH.CATEGORY_UPDATE(id), {
-        data: payload,
+        body: payload,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
       });
     },
     {
