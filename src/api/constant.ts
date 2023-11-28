@@ -38,6 +38,8 @@ export const API_PATH = {
   ORDER_APPROVE: (id: number) => '/order/approve/' + id,
   ORDER_SHIP: (id: number) => '/order/ship/' + id,
   ORDER_CANCEL: (id: number) => '/order/cancel/' + id,
+
+  ORDER_ITEM: '/order_item/store',
   // Đặt hàng
 
   FAQS: '/faq/index',

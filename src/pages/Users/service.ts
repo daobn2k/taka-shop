@@ -112,7 +112,7 @@ export const useGetListUser = (options?: IOptions) => {
   return useRequest(
     (params: IParamsSearch) => {
       return privateRequest(request.get, API_PATH.USER, {
-        params: formatParamsGetList({ page: 1, limit: 20, role: 'USER', ...params }),
+        params: formatParamsGetList({ page: 1, limit: 10, role: 'USER', ...params }),
       });
     },
     {

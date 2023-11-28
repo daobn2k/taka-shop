@@ -82,7 +82,7 @@ export const useGetDetail = (options?: IOptions) => {
 export const useUpdate = (options?: IOptions) => {
   return useRequest(
     (id?: any, payload?: any) => {
-      return privateRequest(request.post, API_PATH.PRODUCT_UPDATE(), {
+      return privateRequest(request.put, API_PATH.PRODUCT_UPDATE(id), {
         data: payload,
       });
     },

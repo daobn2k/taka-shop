@@ -1,0 +1,203 @@
+.infomation {
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(145, 158, 171, 0.16);
+  background-color: var(--background-default);
+}
+
+.btnUpdate {
+  min-width: 90px;
+  height: 32px;
+}
+
+.wrapForm {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+}
+
+.wrapUpload {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > p {
+    max-width: 131px;
+  }
+}
+
+.form {
+  flex: 1;
+}
+.userAvatar {
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  background-color: var(--secondary-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.avatarImg {
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.iconAvatar {
+  max-width: 72px;
+}
+
+.btnUpload {
+  border: 1px dashed var(--primary-primary);
+  border-radius: 6px;
+  background-color: var(--neutral-grey-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 16px;
+  margin-top: 16px;
+  width: 160px;
+  height: 32px;
+  color: var(--primary-primary);
+  box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+}
+
+.iconUpload {
+  max-width: 16px;
+}
+
+.datePicker {
+  width: 100%;
+}
+
+.listDevice {
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(145, 158, 171, 0.16);
+  background-color: var(--background-default);
+  margin-top: 32px;
+}
+
+.logoutAll {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  svg {
+    path {
+      fill: var(--error-main);
+    }
+  }
+}
+
+.device {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--outlined-default);
+  border-radius: 4px;
+}
+
+.iconDevice {
+  padding: 16px;
+  background-color: var(--primary-backgroundhover);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i {
+    font-size: 32px;
+  }
+}
+
+.nameDevice {
+  flex: 1;
+}
+
+.iconLogout {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-backgroundhover);
+  }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.list {
+  li {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .rowItem {
+    display: flex;
+    flex-direction: column;
+    .textThrough {
+      text-decoration: line-through;
+    }
+  }
+
+  :global {
+    .ant-avatar {
+      margin-right: 24px;
+    }
+    .ant-list-item {
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+    }
+  }
+}
+
+.modal {
+  width: 840px !important;
+}
+
+.titleHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.grButton {
+  display: flex;
+  gap: 16px;
+}
+
+.btnCancel {
+  background: var(--secondary-dark);
+  border: none;
+  &:hover {
+    background: var(--secondary-dark);
+    border: none;
+  }
+}
+
+.btnShip {
+  background: var(--link-2);
+  border: none;
+  &:hover {
+    background: var(--link-2);
+    border: none;
+  }
+}
+.btnOrdered {
+  background: var(--success-main);
+  border: none;
+  &:hover {
+    background: var(--success-main);
+    border: none;
+  }
+}

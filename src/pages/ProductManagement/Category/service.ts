@@ -112,7 +112,7 @@ export const useGetListCategories = (options?: any) => {
   return useRequest(
     (params: IParamsSearch) => {
       return privateRequest(request.get, API_PATH.CATEGORY, {
-        params: formatParamsGetList({ page: 1, limit: 20, ...params }),
+        params: formatParamsGetList({ page: 1, limit: 10, ...params }),
       });
     },
     {

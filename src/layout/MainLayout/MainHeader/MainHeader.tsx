@@ -34,56 +34,7 @@ const formatItemMenu = (items: any[], onClickCategory: any) => {
     };
   });
 };
-const getItemsMenu: (categories: any[], profile: any, quantity: any) => MenuProps['items'] = (
-  categories: any[],
-  profile,
-  quantity,
-) => {
-  const dataDefault = [
-    {
-      label: <Text type='heading5-regular'>Trang chủ</Text>,
-      key: 'home-page',
-      icon: '',
-    },
-    {
-      label: <Text type='heading5-regular'>Danh mục</Text>,
-      key: 'category',
-      icon: '',
-      children: categories,
-    },
-    {
-      label: <Text type='heading5-regular'>Sản phẩm</Text>,
-      icon: '',
-      key: 'product',
-    },
-    {
-      label: <Text type='heading5-regular'>Sản phẩm hot</Text>,
-      icon: '',
-      key: 'product-hot',
-    },
-    {
-      label: (
-        <DrawerCart>
-          <Badge count={quantity} showZero>
-            <Text type='heading5-regular'>Giỏ hàng</Text>
-          </Badge>
-        </DrawerCart>
-      ),
-      icon: '',
-      key: 'rating',
-    },
-  ];
 
-  if (profile.role_id === 1) {
-    dataDefault.push({
-      label: <Text type='heading5-regular'>Admin</Text>,
-      icon: '',
-      key: 'admin',
-    });
-  }
-
-  return dataDefault;
-};
 const MainHeader: React.FC = () => {
   const { navigate, onNavSearch } = useCustomNavigate();
   const dataParams = useGetParamsSearch();
@@ -127,6 +78,64 @@ const MainHeader: React.FC = () => {
       },
     });
   };
+
+  const getItemsMenu: (categories: any[], profile: any, quantity: any) => MenuProps['items'] = (
+    categories: any[],
+    profile,
+    quantity,
+  ) => {
+    const dataDefault = [
+      {
+        label: <Text type='heading5-regular'>Trang chủ</Text>,
+        key: 'home-page',
+        icon: '',
+      },
+      {
+        label: <Text type='heading5-regular'>Danh mục</Text>,
+        key: 'category',
+        icon: '',
+        children: categories,
+      },
+      {
+        label: <Text type='heading5-regular'>Sản phẩm</Text>,
+        icon: '',
+        key: 'product',
+      },
+      {
+        label: <Text type='heading5-regular'>Sản phẩm hot</Text>,
+        icon: '',
+        key: 'product-hot',
+      },
+    ];
+
+    if (profile.role_id === 2) {
+      dataDefault.push({
+        label: (
+          <DrawerCart>
+            <Badge count={quantity} showZero>
+              <Text type='heading5-regular'>Giỏ hàng</Text>
+            </Badge>
+          </DrawerCart>
+        ),
+        icon: '',
+        key: 'rating',
+      });
+    }
+    if (profile.role_id === 1) {
+      dataDefault.push({
+        label: (
+          <Text type='heading5-regular' className={styles.avatar}>
+            Admin
+          </Text>
+        ),
+        icon: '',
+        key: 'admin',
+      });
+    }
+
+    return dataDefault;
+  };
+
   const itemsMenu = useMemo(() => {
     return getItemsMenu(formatItemMenu(category, onClickCategory), profile, cart.length);
   }, [category, profile, cart]);
@@ -135,7 +144,11 @@ const MainHeader: React.FC = () => {
     {
       key: 'account',
       label: (
-        <Text type='body-regular' color='text-primary'>
+        <Text
+          type='body-regular'
+          color='text-primary'
+          onClick={() => navigate({ pathname: ROUTE_PATH.INFORMATION })}
+        >
           Tài khoản
         </Text>
       ),

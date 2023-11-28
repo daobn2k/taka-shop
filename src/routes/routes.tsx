@@ -33,6 +33,7 @@ const AdminModifyOrder = React.lazy(() => import('@/pages/Order/components/ViewO
 const AdminFAQSPage = React.lazy(() => import('@/pages/FAQS/FAQS'));
 
 const AdminInfomationPage = React.lazy(() => import('@/pages/Account/Account'));
+const InfomationUserPage = React.lazy(() => import('@/pages/InformationUser/InformationUser'));
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,14 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
+          {
+            path: ROUTE_PATH.INFORMATION,
+            element: (
+              <Suspense fallback={undefined}>
+                <InfomationUserPage />
+              </Suspense>
+            ),
+          },
           {
             path: ROUTE_PATH.REPORT,
             element: (

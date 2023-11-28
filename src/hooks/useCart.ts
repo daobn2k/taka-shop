@@ -57,8 +57,12 @@ export const useCart = () => {
     localStorageUtils.set('cart', data);
   };
 
+  const cartByUser = useMemo(() => {
+    return profile && cart?.length > 0 ? cart.filter((c) => c.userid === profile?.id) : [];
+  }, [cart, profile]);
+
   const formatToOrder = () => {
-    return cart.map((c: ICart) => {
+    return cartByUser.map((c: ICart) => {
       return {
         product: c.id,
         quantity: c.quantity,
@@ -67,10 +71,6 @@ export const useCart = () => {
       };
     }) as IOrderProduct[];
   };
-
-  const cartByUser = useMemo(() => {
-    return profile && cart?.length > 0 ? cart.filter((c) => c.userid === profile?.id) : [];
-  }, [cart, profile]);
 
   const { totalQuantity, totalPrice } = useMemo(() => {
     const totalQuantity = cartByUser.reduce((acc: any, cart: ICart) => acc + cart.quantity, 0);

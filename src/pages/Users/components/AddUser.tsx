@@ -67,7 +67,7 @@ const AddUser = () => {
         phone: values.phone,
         address: values.address,
         gender: values.gender,
-        role_id: 1,
+        role_id: 2,
       });
       return onEdit(id, data);
     }

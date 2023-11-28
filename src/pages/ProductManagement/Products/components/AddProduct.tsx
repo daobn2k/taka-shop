@@ -17,7 +17,6 @@ import Text from '@/components/UI/Text';
 import WrapperInfoDetail from '@/components/UI/WrapperInfoDetail';
 import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
 import { base64ToBlob, beforeUpload, checkMb, isImage, toBase64 } from '@/utils/image';
-import { localStorageUtils } from '@/utils/local-storage-utils';
 
 import styles from './add-product.module.scss';
 import { useGetListCategories } from '../../Category/service';
@@ -35,7 +34,7 @@ const AddProduct = () => {
   }, []);
   const { run: onAdd, loading: loadingAdd } = useAdd({
     onSuccess(res) {
-      message.success(res.message);
+      message.success(res.message ?? 'Tạo mới thành công');
       navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
     },
     onError() {
@@ -45,8 +44,8 @@ const AddProduct = () => {
 
   const { run: onEdit, loading: loadingEdit } = useUpdate({
     onSuccess(res) {
-      message.success(res.message);
-      navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
+      message.success(res.message ?? 'Chỉnh sửa thành công');
+      // navigate(ADMIN_ROUTE_PATH.ADMIN_PRODUCT);
     },
     onError() {
       message.error('Chỉnh sửa thất bại');
@@ -61,23 +60,34 @@ const AddProduct = () => {
     if (!dataImage?.file && !data?.data?.image) {
       return message.error('Vui lòng chọn ảnh sản phẩm');
     }
-    const profile: any = localStorageUtils.get('profile');
-
     const payload: any = new FormData();
     payload.append('name', values?.name);
     payload.append('category_id', values?.category_id?.id || values?.category_id);
-    payload.append('size[]', values?.size);
+    for (const size of values?.size) {
+      payload.append('size[]', size);
+    }
     payload.append('price', values?.price);
     payload.append('quantity', values?.quantity);
     payload.append('code', values.code);
     payload.append('description', values.description);
-    payload.append('price_discount', values.price_discount);
-    payload.append('user_id', profile.id);
+    payload.append('price_discount', values.price_discount === '' ? 0 : values.price_discount);
+    payload.append('color', 'black');
     payload.append('image', dataImage.file);
-    payload.append('color', 'BLACK');
 
     if (id) {
-      payload.append('product_id', id);
+      const payload: any = {
+        name: values?.name,
+        category_id: values?.category_id?.id || values?.category_id,
+        price: values?.price,
+        quantity: values?.quantity,
+        code: values.code,
+        price_discount: values.price_discount === '' ? 0 : values.price_discount,
+        size: values?.size,
+        color: 'black',
+      };
+      if (dataImage.file) {
+        payload.image = dataImage.file;
+      }
       return onEdit(id, payload);
     }
     onAdd(payload);
@@ -96,7 +106,6 @@ const AddProduct = () => {
           value: res?.data?.category?.data?.id,
           label: res?.data?.category?.data?.name,
         },
-        size: res?.data?.size[0].split(','),
       });
     },
     onError() {
@@ -176,7 +185,12 @@ const AddProduct = () => {
                       name='code'
                       rules={[{ required: true, message: 'Nhập mã sản phẩm' }]}
                     >
-                      <InputField label='Mã sản phẩm' placeholder='Nhập mã sản phẩm' require />
+                      <InputField
+                        label='Mã sản phẩm'
+                        placeholder='Nhập mã sản phẩm'
+                        require
+                        disabled
+                      />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
@@ -215,7 +229,19 @@ const AddProduct = () => {
                   </Col>
 
                   <Col span={12}>
-                    <Form.Item name='price_discount'>
+                    <Form.Item
+                      name='price_discount'
+                      rules={[
+                        {
+                          validator: async (_, value) => {
+                            const price = form.getFieldValue('price');
+                            if (value > price) {
+                              throw new Error('Số tiền giảm giá phải nhỏ hơn giá sản phẩm');
+                            }
+                          },
+                        },
+                      ]}
+                    >
                       <InputField
                         label='Giá tiền giảm giá'
                         type='number'

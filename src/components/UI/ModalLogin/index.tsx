@@ -3,6 +3,8 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Form, Row, message } from 'antd';
 import { useAtom } from 'jotai';
 
+import { LIST_GENDER } from '@/api/data';
+import { useAdd } from '@/pages/Users/service';
 import { useAuthLogin } from '@/service/user';
 import { atomProfile } from '@/store/profile/profile';
 import { localStorageUtils } from '@/utils/local-storage-utils';
@@ -11,6 +13,7 @@ import styles from './index.module.scss';
 import CustomModal from '../CustomModal';
 import FooterModal from '../CustomModal/FooterModal';
 import InputField from '../InputField';
+import InputSelect from '../InputSelect';
 import Text from '../Text';
 
 const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
@@ -34,17 +37,42 @@ const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
     },
   });
 
+  const { run: onSignUp } = useAdd({
+    onSuccess(res) {
+      if (res?.data) {
+        setProfile(res?.data);
+        localStorageUtils.set('profile', res?.data);
+        message.success('Đăng ký thành công');
+        onCancel();
+      } else {
+        message.error('Đăng ký thất bại kiểm tra lại thông tin');
+      }
+    },
+    onError() {
+      message.error('Đăng ký thất bại kiểm tra lại thông tin');
+    },
+  });
+
   const onOpen = () => setVisible(true);
   const onCancel = () => {
     setVisible(false);
     form.resetFields();
   };
 
-  const onFinish = (values: { email: string; password: string }) => {
+  const onFinish = (values: any) => {
     const payload: any = new FormData();
     payload.append('email', values.email);
     payload.append('password', values.password);
+    if (isSignUp) {
+      payload.append('password_confirmation', values.re_password);
+      payload.append('name', values.name);
+      payload.append('address', values.address);
+      payload.append('phone', values.phone);
+      payload.append('gender', values.gender);
+      payload.append('role_id', 2);
 
+      return onSignUp(payload);
+    }
     run(payload);
   };
 
@@ -66,30 +94,42 @@ const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
         <Form name='loginForm' onFinish={onFinish} form={form} style={{ margin: '12px 0' }}>
           <Row style={{ display: 'flex', flexDirection: 'column' }}>
             {isSignUp && (
-              <Form.Item
-                name='name'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Nhập họ và tên',
-                  },
-                ]}
-              >
-                <InputField label='Họ và tên' require placeholder='Nhập họ và tên' />
-              </Form.Item>
-            )}
-            {isSignUp && (
-              <Form.Item
-                name='phone'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Nhập số điện thoại',
-                  },
-                ]}
-              >
-                <InputField label='Số điện thoại' require placeholder='Nhập số điện thoại' />
-              </Form.Item>
+              <>
+                <Form.Item
+                  name='name'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Nhập họ và tên',
+                    },
+                  ]}
+                >
+                  <InputField label='Họ và tên' require placeholder='Nhập họ và tên' />
+                </Form.Item>
+
+                <Form.Item
+                  name='phone'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Nhập số điện thoại',
+                    },
+                  ]}
+                >
+                  <InputField label='Số điện thoại' require placeholder='Nhập số điện thoại' />
+                </Form.Item>
+                <Form.Item
+                  name='address'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Nhập địa chỉ',
+                    },
+                  ]}
+                >
+                  <InputField label='Địa chỉ' require placeholder='Nhập địa chỉ' />
+                </Form.Item>
+              </>
             )}
             <Form.Item
               name='email'
@@ -115,22 +155,32 @@ const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
               <InputField label='Mật khẩu' require placeholder='Nhập mật khẩu' type='password' />
             </Form.Item>
             {isSignUp && (
-              <Form.Item
-                name='re-password'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Nhập password',
-                  },
-                ]}
-              >
-                <InputField
-                  label='Xác nhận mật khẩu'
-                  require
-                  placeholder='Nhập mật khẩu '
-                  type='password'
-                />
-              </Form.Item>
+              <>
+                <Form.Item
+                  name='re_password'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Nhập password',
+                    },
+                  ]}
+                >
+                  <InputField
+                    label='Xác nhận mật khẩu'
+                    require
+                    placeholder='Nhập mật khẩu '
+                    type='password'
+                  />
+                </Form.Item>
+                <Form.Item name='gender' rules={[{ required: true, message: 'Chọn giới tính' }]}>
+                  <InputSelect
+                    label='Chọn giới tính'
+                    require
+                    placeholder='Chọn giới tính'
+                    options={LIST_GENDER}
+                  />
+                </Form.Item>
+              </>
             )}
           </Row>
 

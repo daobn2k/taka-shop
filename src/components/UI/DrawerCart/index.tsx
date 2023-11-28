@@ -1,13 +1,16 @@
+/* eslint-disable multiline-ternary */
 // Import necessary components and styles from Ant Design
 import React, { useState } from 'react';
 
-import { Drawer, List, Avatar, Row, Col } from 'antd';
+import { Drawer, List, Avatar, Row, Col, message } from 'antd';
+import { useAtom } from 'jotai';
 
 import { useCart } from '@/hooks/useCart';
-import { useAddOrder } from '@/service/order';
-import { ICart } from '@/store/cart/cart';
+import { useAddOrder, useOrderItem } from '@/service/order';
+import { ICart, atomCart } from '@/store/cart/cart';
 import { useProfile } from '@/store/profile/useProfile';
 import { formatCurrencyVND } from '@/utils/common';
+import { localStorageUtils } from '@/utils/local-storage-utils';
 
 import styles from './index.module.scss';
 import Button from '../Button';
@@ -18,17 +21,56 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
   const [visible, setVisible] = useState(false);
   const handleClose = () => setVisible(false);
   const onOpen = () => setVisible(true);
-  const { cart, totalPrice, totalQuantity, onModifyCart } = useCart();
+  const [defaultCart, setCart] = useAtom(atomCart);
+  const { cart, totalPrice, totalQuantity, onModifyCart, formatToOrder } = useCart();
   const profile = useProfile();
 
-  const { run } = useAddOrder();
-  const onOrder = () => {
+  const { run } = useAddOrder({
+    onSuccess(res) {
+      if (res?.data) {
+        const newCart = defaultCart.filter((c) => c.userid !== profile?.id);
+        localStorageUtils.set('cart', newCart);
+        setCart(newCart);
+        message.success(
+          res?.message ??
+            'Đơn hàng đã được đặt thành công , Cảm ơn quý khách hãy tiếp tục ủng hộ chúng tôi!',
+        );
+      } else {
+        message.error('Đơn hàng đã được đặt thất bại');
+      }
+    },
+    onError() {
+      message.error('Đơn hàng đã được đặt thất bại');
+    },
+  });
+
+  const { runAsync } = useOrderItem();
+  const onOrder = async () => {
+    if (!profile?.phone) {
+      return message.error('Cập nhật số điện thoại cá nhân trước khi tạo đơn hàng');
+    }
+    if (!profile?.address) {
+      return message.error('Cập nhật địa chỉ');
+    }
     const formDataPayload: any = new FormData();
 
+    const dataOrder = formatToOrder();
     formDataPayload.append('user_id', profile?.id);
     formDataPayload.append('total_amount', totalPrice);
     formDataPayload.append('total_quantity', totalQuantity);
-    formDataPayload.append('order_item_id', totalQuantity);
+
+    for (const cart of dataOrder) {
+      const formCartItem: any = new FormData();
+
+      formCartItem.append('product_id', cart.product);
+      formCartItem.append('quantity', cart.quantity);
+      formCartItem.append('size', cart.size);
+      formCartItem.append('amount', cart.price);
+
+      const res = await runAsync(formCartItem);
+
+      formDataPayload.append('order_item_id[]', res?.data?.id);
+    }
 
     run(formDataPayload);
   };
@@ -58,6 +100,7 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
                   </Text>
                   <Text type='body-bold'>
                     {formatCurrencyVND(priceDiscount)}
+                    &nbsp;
                     {item.price_discount > 0 && (
                       <Text
                         element='span'
@@ -93,75 +136,81 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
             );
           }}
         />
-        <Row align={'middle'} justify={'center'}>
-          <Text color='text-primary' type='heading5-bold'>
-            Thông tin đơn hàng
-          </Text>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Họ và tên:</Text>
-              </Col>
-              <Col span={14}>{profile?.name}</Col>
+        {cart.length > 0 ? (
+          <>
+            <Row align={'middle'} justify={'center'}>
+              <Text color='text-primary' type='heading5-bold'>
+                Thông tin đơn hàng
+              </Text>
             </Row>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Email:</Text>
+            <Row>
+              <Col span={12}>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Họ và tên:</Text>
+                  </Col>
+                  <Col span={14}>{profile?.name}</Col>
+                </Row>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Email:</Text>
+                  </Col>
+                  <Col span={14}>{profile?.email}</Col>
+                </Row>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Số điện thoại:</Text>
+                  </Col>
+                  <Col span={14}>{profile?.phone}</Col>
+                </Row>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Địa chỉ:</Text>
+                  </Col>
+                  <Col span={14}>{profile?.address}</Col>
+                </Row>
               </Col>
-              <Col span={14}>{profile?.email}</Col>
-            </Row>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Số điện thoại:</Text>
+              <Col span={12}>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Tạm tính:</Text>
+                  </Col>
+                  <Col span={14}>{formatCurrencyVND(totalPrice)}</Col>
+                </Row>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Số lượng:</Text>
+                  </Col>
+                  <Col span={14}>{totalQuantity} SP</Col>
+                </Row>
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Phí vận chuyển:</Text>
+                  </Col>
+                  <Col span={14}> 0 đ</Col>
+                </Row>
+                <hr style={{ marginTop: 10 }} />
+                <Row style={{ marginTop: '10px' }}>
+                  <Col span={10}>
+                    <Text>Thành tiền: </Text>
+                  </Col>
+                  <Col span={14}>{formatCurrencyVND(totalPrice)}</Col>
+                </Row>
               </Col>
-              <Col span={14}>{profile?.phone}</Col>
             </Row>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Địa chỉ:</Text>
-              </Col>
-              <Col span={14}>{profile?.address}</Col>
+            <hr style={{ marginTop: 24 }} />
+            <Row justify={'end'} align={'middle'} style={{ gap: 12, padding: '8px 0' }}>
+              <Button type='secondary' onClick={() => handleClose()}>
+                Để lúc khác
+              </Button>
+              <Button onClick={() => onOrder()} htmlType='button'>
+                Đặt hàng ngay
+              </Button>
             </Row>
-          </Col>
-          <Col span={12}>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Tạm tính:</Text>
-              </Col>
-              <Col span={14}>{formatCurrencyVND(totalPrice)}</Col>
-            </Row>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Số lượng:</Text>
-              </Col>
-              <Col span={14}>{totalQuantity} SP</Col>
-            </Row>
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Phí vận chuyển:</Text>
-              </Col>
-              <Col span={14}> 0 đ</Col>
-            </Row>
-            <hr style={{ marginTop: 10 }} />
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={10}>
-                <Text>Thành tiền: </Text>
-              </Col>
-              <Col span={14}>{formatCurrencyVND(totalPrice)}</Col>
-            </Row>
-          </Col>
-        </Row>
-        <hr style={{ marginTop: 24 }} />
-        <Row justify={'end'} align={'middle'} style={{ gap: 12, padding: '8px 0' }}>
-          <Button type='secondary' onClick={() => handleClose()}>
-            Để lúc khác
-          </Button>
-          <Button onClick={() => onOrder()} htmlType='button'>
-            Đặt hàng ngay
-          </Button>
-        </Row>
+          </>
+        ) : (
+          <></>
+        )}
       </Drawer>
     </>
   );

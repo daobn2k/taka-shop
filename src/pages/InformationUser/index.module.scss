@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .wrapper {
+    max-width: 1152px;
+  }
+  :global {
+    .ant-select {
+      height: 40px;
+    }
+  }
+  .wrapperFormItem {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+
+    padding: 16px;
+  }
+}
+
+.customBtn {
+  padding: 0;
+}
