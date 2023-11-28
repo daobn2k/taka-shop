@@ -189,8 +189,6 @@ export const ModalView = (
 
   useImperativeHandle(ref, () => ({ onCancel }));
 
-  console.log(data.status, 'data.status');
-
   return (
     <>
       <div onClick={() => setVisible((prev) => !prev)}>{children}</div>
