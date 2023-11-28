@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import { memo, useMemo, useState } from 'react';
 
 import { Image, Rate, Row, Skeleton, message } from 'antd';
@@ -20,10 +21,8 @@ interface IItemNewBook extends IProductData {
   onAddCart?: (size: TProductSize) => void;
   onClickTag?: () => void;
   tag?: string;
-  onOpenLogin: () => void;
+  onOpenLogin?: () => void;
 }
-const sizes: TProductSize[] = ['S', 'M', 'L', 'XL', 'XXl'];
-
 const ItemProduct = (props: IItemNewBook) => {
   const {
     name = '',
@@ -39,6 +38,7 @@ const ItemProduct = (props: IItemNewBook) => {
     price_discount,
     onAddCart,
     onOpenLogin,
+    size: sizes,
   } = props;
   const [size, setSize] = useState<TProductSize>();
   const { navigate } = useCustomNavigate();
@@ -50,7 +50,7 @@ const ItemProduct = (props: IItemNewBook) => {
     }
     if (!isLogin) {
       message.error('Đăng nhập để thực hiện tính này năng');
-      return onOpenLogin();
+      return onOpenLogin && onOpenLogin();
     }
     onAddCart && onAddCart(size);
   };
@@ -71,29 +71,36 @@ const ItemProduct = (props: IItemNewBook) => {
             preview={false}
             onClick={onViewDetail}
           />
-          <Text
-            type='body-regular'
-            color='neutral-white'
-            className={classNames(styles.tag, {
-              [styles.green]: tag === 'Sản phẩm mới',
-              [styles.red]: tag === 'Sản phẩm hot',
-            })}
-            onClick={onClickTag}
-          >
-            {tag}
-          </Text>
+          {tag && (
+            <Text
+              type='body-regular'
+              color='neutral-white'
+              className={classNames(styles.tag, {
+                [styles.green]: tag === 'Sản phẩm mới',
+                [styles.red]: tag === 'Sản phẩm hot',
+              })}
+              onClick={onClickTag}
+            >
+              {tag}
+            </Text>
+          )}
+
           <Row align={'middle'} style={{ gap: 16 }} className={classNames(styles.addSize)}>
-            {sizes.map((s: TProductSize, index) => (
-              <div key={`size-${index}`}>
-                <Text
-                  onClick={() => setSize(s)}
-                  className={classNames(styles.textSize, { [styles.activeSize]: size === s })}
-                >
-                  {s}
-                  &nbsp;
-                </Text>
-              </div>
-            ))}
+            {sizes?.length > 0 ? (
+              sizes?.map((s: any, index) => (
+                <div key={`size-${index}`}>
+                  <Text
+                    onClick={() => setSize(s)}
+                    className={classNames(styles.textSize, { [styles.activeSize]: size === s })}
+                  >
+                    {s}
+                    &nbsp;
+                  </Text>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
           </Row>
           <Text
             type='body-regular'

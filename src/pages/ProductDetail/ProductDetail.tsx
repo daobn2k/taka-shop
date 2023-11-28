@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { Row, Col, Card, Image, Button, Breadcrumb, Tabs, Spin } from 'antd';
 import type { TabsProps } from 'antd';
+import { Breadcrumb, Button, Card, Col, Image, Row, Spin, Tabs } from 'antd';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
 
@@ -16,8 +16,6 @@ import { formatCurrencyVND } from '@/utils/common';
 
 import styles from './index.module.scss';
 import ProductCommentRate from './ProductCommentRate';
-
-const sizes: TProductSize[] = ['S', 'M', 'L', 'XL', 'XXl'];
 
 const ProductDetail = () => {
   const refModalLogin = useRef<any>();
@@ -217,7 +215,7 @@ const ProductDetail = () => {
                 </Col>
                 <Col span={20}>
                   <Row align={'middle'} style={{ gap: 8 }}>
-                    {sizes.map((s: TProductSize, index) => (
+                    {data?.data?.size?.map((s: TProductSize, index: number) => (
                       <Button
                         className={classNames(styles.introduce, { [styles.active]: s === size })}
                         key={`size-${index}`}

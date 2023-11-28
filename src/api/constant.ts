@@ -48,4 +48,5 @@ export const API_PATH = {
   // faqs
   FAQS_STORE: '/faq/store',
   FAQS_UPDATE_STORE: '/faq/update',
+  FAQ_GET_ANSWER: '/faq/get-answer',
 };

@@ -47,7 +47,7 @@ export interface IProductData {
   quantity: number;
   image: string;
   create_date: string;
-  size: string;
+  size: string[];
   code: string;
   price_discount: number;
 }

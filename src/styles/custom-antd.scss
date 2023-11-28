@@ -53,3 +53,19 @@
   border-block-end: 1px solid #d9d9d9 !important;
   margin-bottom: 16px;
 }
+
+.ant-float-btn-circle {
+  width: 64px;
+  height: 64px;
+}
+.ant-float-btn-content {
+  width: 100%;
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+  .ant-float-btn-icon {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

@@ -4,7 +4,7 @@ import type { MenuProps } from 'antd';
 import { Avatar, Layout, Menu, Row } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
-import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
+import { ADMIN_ROUTE_PATH, ROUTE_PATH } from '@/routes/route.constant';
 
 import styles from './index.module.scss';
 
@@ -47,6 +47,11 @@ const items: MenuItem[] = [
     key: 'information',
     icon: '',
     label: <Link to={ADMIN_ROUTE_PATH.ADMIN_INFORMATION}>Thông tin cá nhân</Link>,
+  },
+  {
+    key: 'user',
+    icon: '',
+    label: <Link to={ROUTE_PATH.HOME_PAGE}>Trang người dùng</Link>,
   },
 ];
 
