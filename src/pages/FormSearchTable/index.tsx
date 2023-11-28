@@ -66,12 +66,12 @@ const FormSearchTable = ({ onSearch, placeholder }: IProps) => {
               suffix={<Icon icon='t4font-ic-eva_search-fill' />}
             />
           </Form.Item>
-          <Form.Item name={'date'} className={styles.datePicker}>
+          {/* <Form.Item name={'date'} className={styles.datePicker}>
             <RangePicker
               placeholder={['Từ ngày tạo', 'Đến ngày tạo']}
               disabledDate={disabledDate}
             />
-          </Form.Item>
+          </Form.Item> */}
         </Row>
       </Form>
     </>

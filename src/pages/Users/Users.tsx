@@ -145,7 +145,7 @@ const Users = () => {
 
   const onPushSearch = (payload: any) => {
     onNavSearch({
-      pathname: ADMIN_ROUTE_PATH.MODIFY_USER,
+      pathname: ADMIN_ROUTE_PATH.ADMIN_USERS,
       data: payload,
     });
   };

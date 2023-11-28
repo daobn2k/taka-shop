@@ -56,8 +56,8 @@ export interface IDataPositions {
 }
 export const useAdd = (options?: IOptions) => {
   return useRequest(
-    (payload: IFormAdd) => {
-      return privateRequest(request.post, API_PATH.USER_ADD, {
+    (payload: any) => {
+      return privateRequest(request.post, API_PATH.FAQS_STORE, {
         data: payload,
       });
     },
@@ -82,7 +82,7 @@ export const useGetDetail = (options?: IOptions) => {
 export const useUpdate = (options?: IOptions) => {
   return useRequest(
     (id?: any, payload?: any) => {
-      return privateRequest(request.put, API_PATH.USER_UPDATE(id), {
+      return privateRequest(request.put, API_PATH.FAQS_UPDATE_STORE + `/${id}`, {
         data: payload,
       });
     },

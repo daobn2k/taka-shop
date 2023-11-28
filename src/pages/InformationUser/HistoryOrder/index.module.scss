@@ -139,6 +139,9 @@
 }
 
 .list {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: 600px;
   li {
     justify-content: flex-start;
     align-items: flex-start;

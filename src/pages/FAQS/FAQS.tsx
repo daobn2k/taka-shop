@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Spin, message } from 'antd';
+import { Form, Spin, message } from 'antd';
 import type { TableProps } from 'antd/es/table';
 import { useSearchParams } from 'react-router-dom';
 
-import { LIST_ACTIVE_USER } from '@/api/data';
+import CustomModal from '@/components/UI/CustomModal';
+import FooterModal from '@/components/UI/CustomModal/FooterModal';
 import CustomPagination from '@/components/UI/CustomPagination';
 import CustomTable from '@/components/UI/CustomTable';
 import HeaderListTable from '@/components/UI/HeaderListTable';
+import InputField from '@/components/UI/InputField';
 import { useCustomNavigate } from '@/hooks/useCustomNavigate';
 import FormSearchTable from '@/pages/FormSearchTable';
 import GroupButtonSortTable from '@/pages/GroupButtonSortTable';
@@ -17,9 +19,10 @@ import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
 import { formatParamsSearch } from '@/utils/common';
 
 import styles from './index.module.scss';
-import { useDelete, useGetListUser } from './service';
+import { useAdd, useDelete, useGetListUser, useUpdate } from './service';
 
 const Users = () => {
+  const refModalAdd = useRef<any>();
   const [searchParams] = useSearchParams();
 
   const { data, run, loading, refresh } = useGetListUser();
@@ -54,37 +57,17 @@ const Users = () => {
   const columns = useMemo(() => {
     const defaultCols = [
       {
-        title: 'Họ và tên',
-        dataIndex: 'name',
-        key: 'name',
-        width: 200,
+        title: 'Câu hỏi thường xuyên',
+        dataIndex: 'question',
+        key: 'question',
+        width: 250,
       },
       {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-        width: 150,
+        title: 'Câu trả lời ',
+        dataIndex: 'answer',
+        key: 'answer',
+        width: 250,
       },
-      {
-        title: 'Số điện thoại',
-        dataIndex: 'phone',
-        key: 'phone',
-        width: 150,
-      },
-      {
-        title: 'Địa chỉ',
-        dataIndex: 'address',
-        key: 'address',
-        width: 150,
-      },
-      {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        key: 'status',
-        width: 150,
-        render: (status: any) => LIST_ACTIVE_USER.find((i) => i.id === status)?.label,
-      },
-
       {
         width: 140,
         align: 'center' as any,
@@ -95,10 +78,9 @@ const Users = () => {
         render: (_: any, record: any) => {
           return (
             <div className={styles.divAction}>
-              <EditOutlined
-                className={styles.icon}
-                onClick={() => navigate(`${ADMIN_ROUTE_PATH.MODIFY_USER}/${record.id}`)}
-              />
+              <ModalModifyFaqs data={record} refresh={refresh}>
+                <EditOutlined className={styles.icon} />
+              </ModalModifyFaqs>
               <DeleteOutlined className={styles.icon} onClick={() => onDelete(record.id)} />
             </div>
           );
@@ -116,13 +98,15 @@ const Users = () => {
       ];
     }
     return defaultCols;
-  }, [dragMode, dataParams, onDelete, navigate]);
+  }, [dragMode, dataParams, onDelete, navigate, refresh]);
 
   const onSearch = (value: any) => {
-    const payload = {
+    const payload: any = {
       page: 1,
-      ...value,
     };
+    if (value.name) {
+      payload.question = value.name;
+    }
     onPushSearch(payload);
   };
 
@@ -145,7 +129,7 @@ const Users = () => {
 
   const onPushSearch = (payload: any) => {
     onNavSearch({
-      pathname: ADMIN_ROUTE_PATH.MODIFY_USER,
+      pathname: ADMIN_ROUTE_PATH.ADMIN_FAQS,
       data: payload,
     });
   };
@@ -155,8 +139,10 @@ const Users = () => {
         <HeaderListTable title='Danh sách FAQS' />
         <div className={styles.mainKeyword}>
           <div className={styles.filterList}>
-            {!dragMode && <FormSearchTable onSearch={onSearch} />}
-            <GroupButtonSortTable onClickAdd={() => navigate(ADMIN_ROUTE_PATH.MODIFY_USER)} />
+            {!dragMode && (
+              <FormSearchTable onSearch={onSearch} placeholder='Tìm kiếm theo câu hỏi' />
+            )}
+            <GroupButtonSortTable onClickAdd={() => refModalAdd?.current?.onOpen()} />
           </div>
           <CustomTable
             dataSource={data?.data}
@@ -174,8 +160,92 @@ const Users = () => {
           )}
         </div>
       </div>
+      <ModalModifyFaqs ref={refModalAdd} refresh={refresh} />
     </Spin>
   );
 };
 
 export default Users;
+
+const ModifyFaqs = (props: any, ref: any) => {
+  const { children, refresh, data } = props;
+  const [form] = Form.useForm();
+  const [v, setV] = useState<boolean>(false);
+
+  const { run } = useAdd({
+    onSuccess(res) {
+      if (res?.data) {
+        message.success('Tạo mới FAQ thành công');
+        refresh();
+      } else {
+        message.error('Tạo mới FAQ thất bại');
+      }
+    },
+  });
+
+  const { run: onUpdate } = useUpdate({
+    onSuccess(res) {
+      if (res?.data) {
+        message.success('Chỉnh sửa FAQ thành công');
+        refresh();
+      } else {
+        message.error('chỉnh sửa FAQ thất bại');
+      }
+    },
+  });
+
+  const onCancel = () => {
+    setV(false);
+    form.resetFields();
+  };
+  const onOpen = () => setV(true);
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({ question: data?.question, answer: data?.answer });
+    }
+  }, [data]);
+  useImperativeHandle(ref, () => ({
+    onCancel,
+    onOpen,
+  }));
+
+  const onFinish = (values: any) => {
+    if (data?.id) {
+      return onUpdate(data?.id, values);
+    }
+    run(values);
+  };
+  return (
+    <>
+      <div onClick={() => onOpen()}>{children}</div>
+      <CustomModal visible={v} title='Tạo mới FAQS'>
+        <Form form={form} onFinish={onFinish}>
+          <Form.Item
+            name={'question'}
+            rules={[{ message: 'Nhập câu hỏi thường xuyên', required: true }]}
+          >
+            <InputField
+              label='Câu hỏi thường xuyên'
+              require
+              placeholder='Nhập câu hỏi thường xuyên'
+            />
+          </Form.Item>
+          <Form.Item name={'answer'} rules={[{ message: 'Nhập câu trả lời', required: true }]}>
+            <InputField label='Câu trả lời' require placeholder='Nhập câu trả lời' />
+          </Form.Item>
+          <Form.Item noStyle>
+            <FooterModal
+              titleRight='Tạo mới'
+              titleLeft='Hủy'
+              onCancel={onCancel}
+              typeAction={'submit'}
+            />
+          </Form.Item>
+        </Form>
+      </CustomModal>
+    </>
+  );
+};
+
+const ModalModifyFaqs = forwardRef(ModifyFaqs);

@@ -170,18 +170,18 @@ export const ModalView = (
   const profile = useProfile();
   const onCancel = () => setVisible(false);
 
-  const { run: onCancelOrder } = useCancelOrder({
+  const { run: onCancelOrder, loading: loadingCancel } = useCancelOrder({
     onSuccess() {
       refresh();
     },
   });
-  const { run: onShip } = useShipping({
+  const { run: onShip, loading: loadingShip } = useShipping({
     onSuccess() {
       refresh();
     },
   });
 
-  const { run: onApprove } = useApproveOrder({
+  const { run: onApprove, loading: loadingApprove } = useApproveOrder({
     onSuccess() {
       refresh();
     },
@@ -206,68 +206,70 @@ export const ModalView = (
         closable={false}
         className={styles.modal}
       >
-        <List
-          dataSource={data?.order_items?.data}
-          className={styles.list}
-          renderItem={(item: any) => {
-            const product = item?.product?.data;
-            const priceDiscount =
-              product?.price_discount > 0
-                ? product?.price - product?.price_discount
-                : product?.price;
-            return (
-              <List.Item>
-                <Avatar src={product.image} size={96} shape='square' />
-                <Row className={styles.rowItem}>
-                  <Text type='body-bold'>
-                    {product.name} &nbsp; - &nbsp; <Text element='span'>{item.size}</Text>
-                  </Text>
-                  <Text type='body-bold'>
-                    {formatCurrencyVND(priceDiscount)}
-                    &nbsp;
-                    {product?.price_discount > 0 && (
-                      <Text
-                        element='span'
-                        type='body-medium'
-                        color='text-secondary'
-                        className={styles.textThrough}
-                      >
-                        {formatCurrencyVND(product?.price)}
-                      </Text>
-                    )}
-                  </Text>
-                  <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-                    <Text color='text-primary' type='body-medium'>
-                      {item.quantity}
+        <Spin spinning={loadingCancel || loadingApprove || loadingShip}>
+          <List
+            dataSource={data?.order_items?.data}
+            className={styles.list}
+            renderItem={(item: any) => {
+              const product = item?.product?.data;
+              const priceDiscount =
+                product?.price_discount > 0
+                  ? product?.price - product?.price_discount
+                  : product?.price;
+              return (
+                <List.Item>
+                  <Avatar src={product.image} size={96} shape='square' />
+                  <Row className={styles.rowItem}>
+                    <Text type='body-bold'>
+                      {product.name} &nbsp; - &nbsp; <Text element='span'>{item.size}</Text>
                     </Text>
-                  </div>
-                </Row>
-              </List.Item>
-            );
-          }}
-        />
-        <Row align={'middle'} justify={'space-between'}>
-          <Text type='heading5-bold' color='text-primary'>
-            Tổng tiền : {formatCurrencyVND(data?.total_amount)}
-          </Text>
-          <div className={styles.grButton}>
-            {(data?.status === 0 || data.status === 1) && (
-              <Button className={styles.btnCancel} onClick={() => onCancelOrder(data?.id)}>
-                Hủy đơn hàng
-              </Button>
-            )}
-            {data?.status === 0 && profile?.role_id === 1 && (
-              <Button className={styles.btnShip} onClick={() => onShip(data?.id)}>
-                Chuyển ship
-              </Button>
-            )}
-            {data?.status === 1 && profile?.role_id === 1 && (
-              <Button className={styles.btnOrdered} onClick={() => onApprove(data?.id)}>
-                Đã nhận hàng
-              </Button>
-            )}
-          </div>
-        </Row>
+                    <Text type='body-bold'>
+                      {formatCurrencyVND(priceDiscount)}
+                      &nbsp;
+                      {product?.price_discount > 0 && (
+                        <Text
+                          element='span'
+                          type='body-medium'
+                          color='text-secondary'
+                          className={styles.textThrough}
+                        >
+                          {formatCurrencyVND(product?.price)}
+                        </Text>
+                      )}
+                    </Text>
+                    <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+                      <Text color='text-primary' type='body-medium'>
+                        {item.quantity}
+                      </Text>
+                    </div>
+                  </Row>
+                </List.Item>
+              );
+            }}
+          />
+          <Row align={'middle'} justify={'space-between'}>
+            <Text type='heading5-bold' color='text-primary'>
+              Tổng tiền : {formatCurrencyVND(data?.total_amount)}
+            </Text>
+            <div className={styles.grButton}>
+              {(data?.status === '0' || data.status === '1') && (
+                <Button className={styles.btnCancel} onClick={() => onCancelOrder(data?.id)}>
+                  Hủy đơn hàng
+                </Button>
+              )}
+              {data?.status === '0' && profile?.role_id === 1 && (
+                <Button className={styles.btnShip} onClick={() => onShip(data?.id)}>
+                  Chuyển ship
+                </Button>
+              )}
+              {data?.status === '1' && profile?.role_id === 1 && (
+                <Button className={styles.btnOrdered} onClick={() => onApprove(data?.id)}>
+                  Đã nhận hàng
+                </Button>
+              )}
+            </div>
+          </Row>
+        </Spin>
       </CustomModal>
     </>
   );

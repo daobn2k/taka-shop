@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo } from 'react';
 
+import { EyeOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import type { TableProps } from 'antd/es/table';
 import dayjs from 'dayjs';
@@ -12,10 +13,11 @@ import HeaderListTable from '@/components/UI/HeaderListTable';
 import { useCustomNavigate } from '@/hooks/useCustomNavigate';
 import FormSearchTable from '@/pages/FormSearchTable';
 import { ADMIN_ROUTE_PATH } from '@/routes/route.constant';
-import { formatDate, formatParamsSearch } from '@/utils/common';
+import { formatCurrencyVND, formatDate, formatParamsSearch } from '@/utils/common';
 
 import styles from './index.module.scss';
 import { useGetListOrder } from './service';
+import { ModalViewOrder, TagItem } from '../InformationUser/HistoryOrder/HistoryOrder';
 
 const Order = () => {
   const [searchParams] = useSearchParams();
@@ -35,6 +37,10 @@ const Order = () => {
     run(dataParams);
   }, [searchParams]);
 
+  const handleRefresh = () => {
+    run(dataParams);
+  };
+
   const columns = useMemo(() => {
     const defaultCols = [
       {
@@ -45,8 +51,8 @@ const Order = () => {
       },
       {
         title: 'Thời gian tạo',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        dataIndex: 'created_at',
+        key: 'created_at',
         sorter: (a: any, b: any) => dayjs(a.createdAt).diff(dayjs(b.createdAt)),
         render: (date: string) => {
           return formatDate(date);
@@ -55,19 +61,19 @@ const Order = () => {
       },
       {
         title: 'Người đặt hàng',
-        dataIndex: 'create_uid',
-        key: 'create_uid',
-        render: (create_uid: any) => {
-          return create_uid?.name;
+        dataIndex: 'user',
+        key: 'user',
+        render: (user: any) => {
+          return user?.data?.name;
         },
-        width: 232,
+        width: 200,
       },
       {
         title: 'Tổng tiền',
-        dataIndex: 'total_price',
-        key: 'total_price',
-        render: (total_price: any) => {
-          return total_price;
+        dataIndex: 'total_amount',
+        key: 'total_amount',
+        render: (total_amount: number) => {
+          return formatCurrencyVND(total_amount);
         },
         width: 100,
       },
@@ -75,7 +81,8 @@ const Order = () => {
         title: 'Số lượng',
         dataIndex: 'total_quantity',
         key: 'total_quantity',
-        render: (total_quantity: any) => {
+        align: 'center' as any,
+        render: (total_quantity: number) => {
           return total_quantity;
         },
         width: 100,
@@ -85,7 +92,7 @@ const Order = () => {
         dataIndex: 'status',
         key: 'status',
         render: (status: any) => {
-          return status;
+          return <TagItem status={status} />;
         },
         width: 232,
       },
@@ -99,19 +106,16 @@ const Order = () => {
         render: (_: any, record: any) => {
           return (
             <div className={styles.divAction}>
-              <img
-                src='/svgIcon/ic-solar_eye-bold.svg'
-                alt=''
-                className={styles.icon}
-                onClick={() => navigate(`${ADMIN_ROUTE_PATH.MODIFY_ORDER}/${record?._id}`)}
-              />
+              <ModalViewOrder data={record} refresh={handleRefresh}>
+                <EyeOutlined className={styles.icon} />
+              </ModalViewOrder>
             </div>
           );
         },
       },
     ];
     return defaultCols;
-  }, [navigate]);
+  }, [navigate, handleRefresh]);
 
   const onSearch = (value: any) => {
     const payload = {

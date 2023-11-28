@@ -44,4 +44,8 @@ export const API_PATH = {
 
   FAQS: '/faq/index',
   CREATE_ORDER: '/order/store',
+
+  // faqs
+  FAQS_STORE: '/faq/store',
+  FAQS_UPDATE_STORE: '/faq/update',
 };
