@@ -4,11 +4,15 @@ import { useMemo, useState } from 'react';
 
 import { CloseOutlined, SendOutlined } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
-import { Avatar, Button, Col, Form, Image, Row, Spin, Tag } from 'antd';
+import { Avatar, Button, Col, Form, Image, Rate, Row, Spin, Tag } from 'antd';
 import { useAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
 
-import { IProductData, TProductSize } from '@/api/interface';
+import { IProductData } from '@/api/interface';
+import { useCart } from '@/hooks/useCart';
+import { ROUTE_PATH } from '@/routes/route.constant';
 import { atomShowChatBot } from '@/store/showChatbot/showChatbot';
+import { atomViewCart } from '@/store/viewCart/viewCart';
 
 import {
   dataQuestion,
@@ -16,6 +20,7 @@ import {
   formatBotAnswer,
   formatQuestionUser,
   listQA,
+  normalizeString,
 } from './contants';
 import styles from './index.module.scss';
 import { useGetAnswer, useGetListFAQS } from './service';
@@ -24,11 +29,13 @@ import InputTextArea from '../UI/InputTextArea';
 import Text from '../UI/Text';
 
 const ChatBot = () => {
+  const { onAddCart, cart } = useCart();
   const [, setShowChatBot] = useAtom(atomShowChatBot);
+  const [, setVisibleCart] = useAtom(atomViewCart);
+
   const [fined, setFined] = useState<any>(undefined);
   const [form] = Form.useForm();
-  const [size, setSize] = useState<TProductSize>();
-
+  const navigate = useNavigate();
   const [listQA, setListQA] = useState<listQA[]>([
     {
       type: 'bot',
@@ -56,10 +63,13 @@ const ChatBot = () => {
   });
 
   const onFinish = (value: any) => {
-    const newListQA = [...formatQuestionUser(value.question), ...listQA];
+    const newListQA = [...formatQuestionUser(value?.question), ...listQA];
     setListQA(newListQA);
-
-    run({ question: value.question });
+    if (normalizeString(value?.question).includes(normalizeString('Đặt hàng'))) {
+      handleOrderChatBot();
+    } else {
+      run({ question: value.question });
+    }
     form.resetFields();
   };
 
@@ -68,9 +78,48 @@ const ChatBot = () => {
 
     setListQA(newListQA);
 
+    if (normalizeString(e).includes(normalizeString('Đặt hàng'))) {
+      return handleOrderChatBot();
+    }
     run({ question: e });
   };
 
+  const handleOrderChatBot = () => {
+    let botAnswer: listQA[];
+    if (cart?.length <= 0) {
+      botAnswer = formatBotAnswer(
+        <>
+          Vui lòng thêm sản phẩm vào giỏ hàng để đặt hàng
+          <Row align={'middle'}>
+            <Tag onClick={() => onClickTag('Sản phẩm nào mới nhất ?')}>Sản phẩm nào mới nhất ?</Tag>
+            <Tag onClick={() => onClickTag('Sản phẩm đang giảm giá ?')}>
+              Sản phẩm đang giảm giá ?
+            </Tag>
+          </Row>
+        </>,
+      );
+    }
+    if (cart?.length > 0) {
+      botAnswer = formatBotAnswer(
+        <>
+          Bạn đang tại đang có {cart.length} sản phẩm đơn hàng
+          <Text>
+            Bạn có muốn đặt hàng ngay ? &nbsp;
+            <Text
+              element='span'
+              color='primary-main'
+              onClick={() => onViewOrder()}
+              className={styles.viewOrder}
+            >
+              Vui lòng click vào đây,&nbsp;
+            </Text>
+            Để kiểm tra đơn hàng và đặt hàng ngay
+          </Text>
+        </>,
+      );
+    }
+    setListQA((prev) => [...botAnswer, ...prev]);
+  };
   const onClose = () => setShowChatBot(false);
 
   const listQuestion = useMemo(() => {
@@ -93,6 +142,17 @@ const ChatBot = () => {
       wait: 500,
     },
   );
+
+  const onViewDetail = (ele: IProductData) => {
+    setShowChatBot(false);
+    return navigate({ pathname: `${ROUTE_PATH.PRODUCT}/${ele?.id}` });
+  };
+
+  const onViewOrder = () => {
+    setShowChatBot(false);
+    setVisibleCart(true);
+  };
+
   return (
     <div className={styles.root}>
       <Row className={styles.wrapFAQS}>
@@ -145,19 +205,29 @@ const ChatBot = () => {
                     {e?.data?.map((ele: IProductData) => {
                       return (
                         <Col key={ele.name} span={6} className={styles.colProduct}>
+                          <Text
+                            className={styles.addCart}
+                            type='caption-regular'
+                            onClick={() => onAddCart(ele, 1, 'S')}
+                          >
+                            Thêm giỏ hàng
+                          </Text>
                           <Image
                             preview={false}
                             alt=''
                             src={ele.image}
                             className={styles.imageQS}
+                            onClick={() => onViewDetail(ele)}
                           />
                           <Text
                             type='body-regular'
                             color='text-primary'
                             className={styles.ellipsText}
+                            onClick={() => onViewDetail(ele)}
                           >
                             {ele?.name}
                           </Text>
+                          <Rate value={ele?.total_rating} disabled></Rate>
                         </Col>
                       );
                     })}

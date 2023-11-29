@@ -1,5 +1,5 @@
 import { useDebounceFn } from 'ahooks';
-import { DatePicker, Form, Input, Row } from 'antd';
+import { Form, Input, Row } from 'antd';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -7,8 +7,6 @@ import { Icon } from '@/components/UI/IconFont/Icon';
 import { formatFormValuesChange, formatParamsSearch } from '@/utils/common';
 
 import styles from './index.module.scss';
-
-const { RangePicker } = DatePicker;
 
 interface IProps {
   onSearch: (value: { name: string; start_created_date: string; end_created_date: string }) => void;
@@ -42,11 +40,6 @@ const FormSearchTable = ({ onSearch, placeholder }: IProps) => {
 
   const dataParams = formatParamsSearch(searchParams);
 
-  const disabledDate = (current: any) => {
-    // Can not select days after today and before start Date
-    const isBefore = dayjs().isBefore(current);
-    return isBefore;
-  };
   return (
     <>
       <Form

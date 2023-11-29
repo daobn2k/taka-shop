@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-new-array */
 export const dataQuestion = [
+  'Bạn có muốn đặt hàng ngay?',
   'Có bao nhiêu sản phẩm ?',
   'Sản phẩm nào mới nhất ?',
   'Sản phẩm giảm giá rẻ nhất ?',
@@ -46,12 +47,12 @@ export const formatBotAnswer = (e: any, data?: any) => {
 };
 export interface listQA {
   type: 'bot' | 'user';
-  text: string;
+  text: string | React.ReactNode;
   data?: any;
   loading?: boolean;
 }
 
-function normalizeString(str: string) {
+export function normalizeString(str: string) {
   return str
     .normalize('NFD')
     .replaceAll(/[\u0300-\u036F]/g, '')

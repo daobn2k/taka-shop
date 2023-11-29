@@ -5,6 +5,14 @@
   z-index: 1000000;
 
   display: flex;
+  :global {
+    .ant-rate {
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
 }
 .wrapFAQS {
   width: 250px;
@@ -135,4 +143,33 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.imageQS,
+.ellipsText {
+  cursor: pointer;
+}
+
+.colProduct {
+  position: relative;
+
+  &:hover {
+    .addCart {
+      visibility: visible;
+    }
+  }
+}
+
+.addCart {
+  visibility: hidden;
+  background-color: white;
+  width: 100%;
+  max-width: 105px;
+  text-align: center;
+
+  cursor: pointer;
+}
+
+.viewOrder {
+  cursor: pointer;
 }
