@@ -38,6 +38,7 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
             'Đơn hàng đã được đặt thành công , Cảm ơn quý khách hãy tiếp tục ủng hộ chúng tôi!',
         );
         setVisible(false);
+        onModifyCartPending(1);
       } else {
         message.error('Đơn hàng đã được đặt thất bại');
       }
@@ -75,7 +76,6 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
       formDataPayload.append('order_item_id[]', res?.data?.id);
     }
 
-    onModifyCartPending(1);
     run(formDataPayload);
   };
   return (
