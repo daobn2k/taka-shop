@@ -68,7 +68,6 @@ const AddProduct = () => {
     }
     payload.append('price', values?.price);
     payload.append('quantity', values?.quantity);
-    payload.append('code', values.code);
     payload.append('description', values.description);
     payload.append('price_discount', values.price_discount === '' ? 0 : values.price_discount);
     payload.append('color', 'black');
@@ -80,7 +79,6 @@ const AddProduct = () => {
         category_id: values?.category_id?.id || values?.category_id,
         price: values?.price,
         quantity: values?.quantity,
-        code: values.code,
         price_discount: values.price_discount === '' ? 0 : values.price_discount,
         size: values?.size,
         color: 'black',
@@ -180,19 +178,18 @@ const AddProduct = () => {
               </Col>
               <Col span={16}>
                 <Row gutter={32} className={styles.itemProduct}>
-                  <Col span={12}>
-                    <Form.Item
-                      name='code'
-                      rules={[{ required: true, message: 'Nhập mã sản phẩm' }]}
-                    >
-                      <InputField
-                        label='Mã sản phẩm'
-                        placeholder='Nhập mã sản phẩm'
-                        require
-                        disabled
-                      />
-                    </Form.Item>
-                  </Col>
+                  {id && (
+                    <Col span={12}>
+                      <Form.Item name='code'>
+                        <InputField
+                          label='Mã sản phẩm'
+                          placeholder='Nhập mã sản phẩm'
+                          require
+                          disabled
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
                   <Col span={12}>
                     <Form.Item
                       name='name'

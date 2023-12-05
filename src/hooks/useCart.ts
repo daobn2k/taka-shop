@@ -4,11 +4,14 @@ import { useAtom } from 'jotai';
 
 import { IProductData, TProductSize } from '@/api/interface';
 import { ICart, IOrderProduct, atomCart } from '@/store/cart/cart';
+import { atomCartPending } from '@/store/cartPending/cartPending';
 import { useProfile } from '@/store/profile/useProfile';
 import { localStorageUtils } from '@/utils/local-storage-utils';
 
 export const useCart = () => {
   const [cart, setCart] = useAtom(atomCart);
+  const [cartPending, setCartPending] = useAtom(atomCartPending);
+
   const profile = useProfile();
 
   const onAddCart = (product: IProductData, quantity?: number, size?: TProductSize) => {
@@ -52,6 +55,12 @@ export const useCart = () => {
     setData(newCart);
   };
 
+  const onModifyCartPending = (quantity: number) => {
+    const newCartPending = Number(cartPending) + quantity;
+    localStorageUtils.set('cart-pending', newCartPending);
+    setCartPending(newCartPending);
+  };
+
   const setData = (data: ICart[]) => {
     setCart(data);
     localStorageUtils.set('cart', data);
@@ -90,5 +99,6 @@ export const useCart = () => {
     totalQuantity,
     totalPrice,
     formatToOrder,
+    onModifyCartPending,
   };
 };

@@ -57,6 +57,7 @@ const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
   const onCancel = () => {
     setVisible(false);
     form.resetFields();
+    setIsSignUp(false);
   };
 
   const onFinish = (values: any) => {
@@ -85,7 +86,11 @@ const LoginModal = ({ children }: { children?: React.ReactNode }, ref: any) => {
       <div onClick={onOpen}>{children}</div>
       <CustomModal
         visible={visible}
-        title='Đăng nhập'
+        title={
+          isSignUp
+            ? 'Hãy đăng ký để trải nhiệm website'
+            : 'Vui lòng đăng nhập để trải nhiệm website'
+        }
         onCancel={onCancel}
         width={400}
         closable={true}

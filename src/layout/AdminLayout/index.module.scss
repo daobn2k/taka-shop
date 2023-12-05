@@ -1,3 +1,37 @@
 .sideBar {
   padding: 16px 0;
 }
+
+.order {
+  color: #dfe3e5 !important;
+}
+
+.countOrder {
+  font-weight: bold;
+  margin-left: 8px;
+
+  background: red;
+  color: var(--white);
+  padding: 4px;
+
+  border-radius: 50%;
+
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:global {
+  .ant-menu-title-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.linkOrder {
+  display: flex;
+}

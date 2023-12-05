@@ -23,7 +23,8 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
   const handleClose = () => setVisible(false);
   const onOpen = () => setVisible(true);
   const [defaultCart, setCart] = useAtom(atomCart);
-  const { cart, totalPrice, totalQuantity, onModifyCart, formatToOrder } = useCart();
+  const { cart, totalPrice, totalQuantity, onModifyCart, formatToOrder, onModifyCartPending } =
+    useCart();
   const profile = useProfile();
 
   const { run, loading } = useAddOrder({
@@ -74,6 +75,7 @@ const DrawerCart = ({ children }: { children: React.ReactNode }) => {
       formDataPayload.append('order_item_id[]', res?.data?.id);
     }
 
+    onModifyCartPending(1);
     run(formDataPayload);
   };
   return (
