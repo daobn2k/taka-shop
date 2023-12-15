@@ -108,7 +108,7 @@ const MainHeader: React.FC = () => {
       },
     ];
 
-    if (profile.role_id === 2) {
+    if (Number(profile.role_id) === 2) {
       dataDefault.push({
         label: (
           <DrawerCart>
@@ -121,7 +121,7 @@ const MainHeader: React.FC = () => {
         key: 'rating',
       });
     }
-    if (profile.role_id === 1) {
+    if (Number(profile.role_id) === 1) {
       dataDefault.push({
         label: (
           <Text type='heading5-regular' className={styles.avatar}>
