@@ -42,7 +42,7 @@ const Report = () => {
               Tổng số người dùng
             </Text>
             <Text type='heading3-bold' className={styles.value}>
-              {data?.revenue}
+              {data?.total_user}
             </Text>
           </Col>
           <Col span={7} className={styles.colItem}>
