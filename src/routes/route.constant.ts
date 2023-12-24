@@ -26,4 +26,5 @@ export const ADMIN_ROUTE_PATH = {
   MODIFY_CATEGORY: '/admin/category/modify',
   MODIFY_FAQS: '/admin/faqs/modify',
   MODIFY_ORDER: '/admin/order/modify',
+  ADMIN_REPORT: '/admin/report',
 };

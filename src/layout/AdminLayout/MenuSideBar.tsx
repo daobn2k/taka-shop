@@ -27,11 +27,11 @@ const MenuSideBar = () => {
     setC(0);
   };
   const items: MenuItem[] = [
-    // {
-    //   key: 'dashboard',
-    //   icon: '',
-    //   label: <Link to={ADMIN_ROUTE_PATH.ADMIN_DASHBOARD}>Thống kê</Link>,
-    // },
+    {
+      key: 'dashboard',
+      icon: '',
+      label: <Link to={ADMIN_ROUTE_PATH.ADMIN_REPORT}>Thống kê</Link>,
+    },
     {
       key: 'product',
       icon: '',

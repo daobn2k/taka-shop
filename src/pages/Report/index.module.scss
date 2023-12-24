@@ -1,2 +1,30 @@
 .wrap {
+  margin-top: 24px;
+  .listItem {
+    width: 100%;
+    gap: 24px;
+  }
+  .colItem {
+    background-color: white;
+
+    margin-top: 24px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 4px;
+
+    .itemTitle {
+      padding: 8px 0;
+      border-bottom: 1px solid #f9f9f9;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .value {
+      padding: 8px;
+    }
+  }
 }

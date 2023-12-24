@@ -35,6 +35,8 @@ const AdminFAQSPage = React.lazy(() => import('@/pages/FAQS/FAQS'));
 const AdminInfomationPage = React.lazy(() => import('@/pages/Account/Account'));
 const InfomationUserPage = React.lazy(() => import('@/pages/InformationUser/InformationUser'));
 
+const ReportPage = React.lazy(() => import('@/pages/Report/Report'));
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -205,6 +207,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={undefined}>
                 <AdminInfomationPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ADMIN_ROUTE_PATH.ADMIN_REPORT,
+            element: (
+              <Suspense fallback={undefined}>
+                <ReportPage />
               </Suspense>
             ),
           },
