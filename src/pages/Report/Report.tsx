@@ -19,7 +19,7 @@ const Report = () => {
   return (
     <Spin spinning={loading}>
       <div className={styles.wrap}>
-        <HeaderListTable title='Thống kế đơn hàng' />
+        <HeaderListTable title='Thống kế ' />
         <Row className={styles.listItem}>
           <Col span={7} className={styles.colItem}>
             <Text type='heading5-regular' className={styles.itemTitle}>
